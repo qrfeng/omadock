@@ -42,7 +42,7 @@ Item {
     readonly property string family: ""                                    // "" = Style.font.family
     readonly property int px: 13                                           // 主题的 Style.font.caption 只有 10px
     readonly property int weight: Font.Medium                              // Font.Normal / Font.DemiBold
-    readonly property color bg: Util.alpha("#1C1C1E", 0.86)                 // 主题的 Color.tooltip.background 是 @0.97 的实色
+    readonly property color bg: Util.alpha("#1C1C1E", 0.60)                 // 主题的 Color.tooltip.background 是 @0.97 的实色
     readonly property color fg: "#F5F5F7"                                  // 主题的 Color.tooltip.text
     readonly property int radius: 8                                        // 主题的 Style.cornerRadius（Omarchy 现在是 0）
     readonly property real borderAlpha: 0.0                                // 1 = 保留主题的 1px 描边

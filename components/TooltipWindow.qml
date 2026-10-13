@@ -1,17 +1,24 @@
 import QtQuick
 import Quickshell
+import Quickshell.Wayland
 import qs.Commons
 
-// A tooltip above `target` in its own popup surface, so the dock layer does
-// not need room for it. Display only: an empty mask lets the pointer through.
+// 本机改动：悬停气泡从 PopupWindow 改成独立图层（PanelWindow）。
 //
-// The surface has one fixed size; the body sits at its bottom, centred over
-// the target, and changes size inside it (a window preview arriving and
-// taking the window's shape). A surface that resized with its content was
-// shown at the old position for a frame, so the preview jumped.
-// `level` (0..1, from TooltipLife) fades the body and, when `rises`
-// (TooltipLife.rises: Full only), lifts it a little.
-PopupWindow {
+// 为什么要改：PopupWindow 在 wlroots 上是 xdg-popup（父窗口的子表面），
+// Hyprland 只给 layer surface 算背景模糊，子表面永远拿不到 backdrop blur ——
+// 实测证据：hover 时 `hyprctl layers` 里不会多出任何图层。想要真毛玻璃，
+// 气泡必须是自己的 layer surface，命名空间 `omadock-tooltip`，由 layerrule
+// （写在 ~/./.config/hypr/looknfeel.lua 的 omadock-tooltip-glass）开 blur。
+//
+// 原版（PopupWindow + anchor 机制）备份在同目录 TooltipWindow.qml.upstream。
+//
+// 摆位：dock 窗口是 bottom+left 锚定、左右贴屏、下边距 0，所以图标在 dock
+// 窗口里的坐标就等于"距屏幕左边 x、距屏幕底 (dockWindow.height - y)"，
+// 屏幕高度在算 bottom 边距时正好抵消：margins.bottom = hostWindow.height - p.y + gap - riseRoom。
+//
+// `level`（0..1，来自 TooltipLife）负责淡入淡出，`rises` 时顺便向上抬一点。
+PanelWindow {
   id: tip
 
   property Item target: null
@@ -22,50 +29,60 @@ PopupWindow {
   property bool rises: true
 
   readonly property var hostWindow: target ? target.QsWindow.window : null
-  readonly property real maxWidth: Style.space(640)
-  readonly property real maxHeight: Style.space(560)
+  // 上抬动画需要的余量（放在气泡下方，免得动画期间被窗口裁掉底边）
+  readonly property real riseRoom: tip.rises ? Style.space(6) : 0
 
-  // Surface centre in host-window x, clamped so the surface stays on screen.
-  property real surfaceCenterX: 0
-  property real targetCenterX: 0
-
+  screen: tip.hostWindow ? tip.hostWindow.screen : null
   color: "transparent"
-  mask: Region {}
-  visible: shown && hostWindow !== null && body !== null
-  implicitWidth: Math.ceil(Math.min(tip.maxWidth, tip.hostWindow ? tip.hostWindow.width - Style.gapsOut * 2 : tip.maxWidth))
-  implicitHeight: Math.ceil(tip.maxHeight)
+  visible: shown && tip.hostWindow !== null && tip.body !== null
 
+  // 图层属性：Overlay 层、不吃键盘、不占排他区、输入区域为空（点击穿透，
+  // 和原来 PopupWindow 的 mask: Region {} 行为一致）。
+  WlrLayershell.namespace: "omadock-tooltip"
+  WlrLayershell.layer: WlrLayer.Overlay
+  WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
+  exclusionMode: ExclusionMode.Ignore
+  exclusiveZone: 0
+  mask: Region {}
+
+  anchors {
+    bottom: true
+    left: true
+  }
+
+  implicitWidth: tip.body ? Math.ceil(tip.body.width) : 0
+  implicitHeight: tip.body ? Math.ceil(tip.body.height + 2 * tip.riseRoom) : 0
+
+  margins {
+    left: {
+      if (!tip.hostWindow || !tip.body || !tip.target) return 0
+      var win = tip.hostWindow.contentItem
+      var p = win.mapFromItem(tip.target, tip.target.width / 2, 0)
+      var half = tip.implicitWidth / 2
+      var maxX = (tip.screen ? tip.screen.width : win.width) - half - Style.gapsOut
+      return Math.round(Math.max(half + Style.gapsOut, Math.min(maxX, p.x)) - half)
+    }
+    bottom: {
+      if (!tip.hostWindow || !tip.body || !tip.target) return 0
+      var p = tip.hostWindow.contentItem.mapFromItem(tip.target, tip.target.width / 2, 0)
+      return Math.round(tip.hostWindow.height - p.y + tip.gap - tip.riseRoom)
+    }
+  }
+
+  // body 贴在窗口底部居中；`rises` 时按 (1 - level) 向下位移，视觉上就是抬起来。
   Binding {
     target: tip.body
     property: "x"
-    value: Math.round(Math.max(0, Math.min(tip.implicitWidth - (tip.body ? tip.body.width : 0),
-      tip.targetCenterX - (tip.surfaceCenterX - tip.implicitWidth / 2) - (tip.body ? tip.body.width : 0) / 2)))
+    value: Math.round((tip.implicitWidth - (tip.body ? tip.body.width : 0)) / 2)
   }
   Binding {
     target: tip.body
     property: "y"
-    value: Math.round(tip.implicitHeight - (tip.body ? tip.body.height : 0) + (tip.rises ? (1 - tip.level) * Style.space(6) : 0))
+    value: Math.round(tip.riseRoom + (tip.rises ? (1 - tip.level) * tip.riseRoom : 0))
   }
   Binding {
     target: tip.body
     property: "opacity"
     value: tip.level
-  }
-
-  anchor.window: hostWindow
-  anchor.rect.width: 1
-  anchor.rect.height: 1
-  anchor.edges: Edges.Top
-  anchor.gravity: Edges.Top
-  anchor.adjustment: PopupAdjustment.None
-  anchor.onAnchoring: {
-    if (!tip.hostWindow || !tip.target) return
-    var win = tip.hostWindow.contentItem
-    var p = win.mapFromItem(tip.target, tip.target.width / 2, 0)
-    var half = tip.implicitWidth / 2
-    tip.targetCenterX = p.x
-    tip.surfaceCenterX = Math.round(Math.max(Style.gapsOut + half, Math.min(win.width - Style.gapsOut - half, p.x)))
-    tip.anchor.rect.x = tip.surfaceCenterX
-    tip.anchor.rect.y = Math.round(p.y - tip.gap)
   }
 }
