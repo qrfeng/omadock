@@ -89,9 +89,10 @@ Item {
       Rectangle {
         anchors.fill: parent
         radius: Style.space(4)
-        color: Color.tooltip.background
+        // 本机改动：与 DockItem/HoverTooltip 的气泡保持一致（备份：WindowCardStack.qml.upstream）
+        color: Util.alpha("#2C2C2E", 0.92)
         border.width: 1
-        border.color: Util.alpha(Color.tooltip.text, card.depth === 0 ? 0.30 : 0.18)
+        border.color: Util.alpha("#F5F5F7", card.depth === 0 ? 0.30 : 0.18)
       }
 
       Image {
@@ -132,16 +133,16 @@ Item {
         width: counter.implicitWidth + Style.space(10)
         height: counter.implicitHeight + Style.space(4)
         radius: height / 2
-        color: Util.alpha(Color.tooltip.background, 0.85)
+        color: Util.alpha("#F5F5F7", 0.14)
 
         Text {
           id: counter
           anchors.centerIn: parent
           text: (index + 1) + "/" + stack.count
           textFormat: Text.PlainText
-          color: Color.tooltip.text
+          color: "#F5F5F7"
           font.family: Style.font.family
-          font.pixelSize: Math.max(9, Style.font.caption - 2)
+          font.pixelSize: Math.max(10, Style.font.caption + 1)
           font.bold: true
         }
       }

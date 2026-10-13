@@ -33,6 +33,21 @@ Item {
   width: 0
   height: 0
 
+  // ===== 本机改动：悬停气泡样式（上游没有这段，原文件备份为 HoverTooltip.qml.upstream）=====
+  // 上游的气泡文字/配色全部取 Omarchy 主题 token（Color.tooltip.*、Style.font.*），
+  // 那是全局的（bar、面板、按钮都吃）。这里只在 dock 的气泡上覆盖一层。
+  // 想跟随主题就把值改回注释里写的 token 名。
+  QtObject {
+    id: tipStyle
+    readonly property string family: ""                                    // "" = Style.font.family
+    readonly property int px: 13                                           // 主题的 Style.font.caption 只有 10px
+    readonly property int weight: Font.Medium                              // Font.Normal / Font.DemiBold
+    readonly property color bg: Util.alpha("#1C1C1E", 0.86)                 // 主题的 Color.tooltip.background 是 @0.97 的实色
+    readonly property color fg: "#F5F5F7"                                  // 主题的 Color.tooltip.text
+    readonly property int radius: 8                                        // 主题的 Style.cornerRadius（Omarchy 现在是 0）
+    readonly property real borderAlpha: 0.0                                // 1 = 保留主题的 1px 描边
+  }
+
   onHoveredChanged: {
     if (bubble.hovered) dwell.restart()
     else {
@@ -76,10 +91,10 @@ Item {
 
       BorderSurface {
         id: bubbleSurface
-        color: Color.tooltip.background
-        borderSpec: Border.surfaceSpec("tooltip", "border", Color.tooltip.border, 1)
-        radius: Style.cornerRadius
-        padding: Style.space(4)
+        color: tipStyle.bg
+        borderSpec: Border.surfaceSpec("tooltip", "border", Util.alpha(Color.tooltip.border, tipStyle.borderAlpha), 1)
+        radius: tipStyle.radius
+        padding: Style.space(6)
         width: bubbleContent.implicitWidth + contentLeftInset + contentRightInset
         height: bubbleContent.implicitHeight + contentTopInset + contentBottomInset
 
@@ -93,9 +108,10 @@ Item {
             id: bubbleLabel
             text: bubble.text
             textFormat: Text.PlainText
-            color: Color.tooltip.text
-            font.family: Style.font.family
-            font.pixelSize: Style.font.caption
+            color: tipStyle.fg
+            font.family: tipStyle.family === "" ? Style.font.family : tipStyle.family
+            font.pixelSize: tipStyle.px > 0 ? tipStyle.px : Style.font.caption
+            font.weight: tipStyle.weight
             horizontalAlignment: Text.AlignHCenter
           }
 
@@ -126,9 +142,9 @@ Item {
             horizontalAlignment: Text.AlignHCenter
             text: (cardStack.wanted && bubble.dockRoot) ? bubble.dockRoot.windowRowLabel(bubble.windows[cardStack.frontIndex]) : ""
             textFormat: Text.PlainText
-            color: Util.alpha(Color.tooltip.text, 0.80)
-            font.family: Style.font.family
-            font.pixelSize: Math.max(10, Style.font.caption - 1)
+            color: Util.alpha(tipStyle.fg, 0.80)
+            font.family: tipStyle.family === "" ? Style.font.family : tipStyle.family
+            font.pixelSize: Math.max(10, (tipStyle.px > 0 ? tipStyle.px : Style.font.caption) - 1)
             elide: Text.ElideRight
             maximumLineCount: 1
           }

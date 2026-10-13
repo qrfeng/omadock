@@ -700,10 +700,11 @@ Item {
     BorderSurface {
       visible: root ? root.dragRemoveArmed : false
       z: 300
-      color: Color.tooltip.background
-      borderSpec: Border.surfaceSpec("tooltip", "border", Color.tooltip.border, 1)
-      radius: Style.cornerRadius
-      padding: Style.space(4)
+      // 本机改动：拖拽下框时的 “Unpin” 气泡，跟悬停气泡同一套配色（备份：DockCard.qml.upstream）
+      color: Util.alpha("#1C1C1E", 0.86)
+      borderSpec: Border.surfaceSpec("tooltip", "border", Util.alpha(Color.tooltip.border, 0.0), 1)
+      radius: 8
+      padding: Style.space(6)
       width: removeLabel.implicitWidth + contentLeftInset + contentRightInset
       height: removeLabel.implicitHeight + contentTopInset + contentBottomInset
       x: Math.round((root ? root.dragPointerX : 0) - width / 2)
@@ -716,9 +717,9 @@ Item {
         anchors.centerIn: parent
         text: root && root.dragGroupId !== "" ? "Remove group" : "Unpin"
         textFormat: Text.PlainText
-        color: Color.tooltip.text
+        color: "#F5F5F7"
         font.family: Style.font.family
-        font.pixelSize: Style.font.caption
+        font.pixelSize: Math.max(12, Style.font.caption + 3)
       }
     }
   }

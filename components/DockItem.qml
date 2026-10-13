@@ -563,6 +563,20 @@ Item {
       && (label.folded || (root ? root.labelTooltipNeeded("app", item.tooltipWindows.length > 0, item.tooltipText !== item.displayName, label.shortened) : true))
     readonly property bool showing: itemTooltip.tipShown && itemTooltip.wanted
 
+    // ===== 本机改动：应用图标的气泡样式（上游没有这段，原文件备份为 DockItem.qml.upstream）=====
+    // 上游把气泡文字写在本文件里（不是 HoverTooltip.qml），所以两个文件都要覆盖。
+    // 每一项想要主题原值，就改回注释里的 token。
+    QtObject {
+      id: tipStyle
+      readonly property string family: ""                       // "" = Style.font.family
+      readonly property int px: 13                              // 主题 caption = 10px
+      readonly property int weight: Font.Medium
+      readonly property color bg: Util.alpha("#1C1C1E", 0.86)    // 主题 Color.tooltip.background 是 @0.97 实底
+      readonly property color fg: "#F5F5F7"
+      readonly property int radius: 8
+      readonly property real borderAlpha: 0.0                   // 1 = 保留主题描边
+    }
+
     TooltipLife {
       id: itemTooltipLife
       dockRoot: root
@@ -602,9 +616,9 @@ Item {
 
         BorderSurface {
           id: itemTooltipSurface
-          color: Color.tooltip.background
-          borderSpec: Border.surfaceSpec("tooltip", "border", Color.tooltip.border, 1)
-          radius: Style.cornerRadius > 0 ? Style.cornerRadius : 8
+          color: tipStyle.bg
+          borderSpec: Border.surfaceSpec("tooltip", "border", Util.alpha(Color.tooltip.border, tipStyle.borderAlpha), 1)
+          radius: tipStyle.radius
           padding: Style.space(6)
           width: tooltipContent.implicitWidth + contentLeftInset + contentRightInset
           height: tooltipContent.implicitHeight + contentTopInset + contentBottomInset
@@ -618,9 +632,10 @@ Item {
             Text {
               text: item.tooltipText !== "" ? item.tooltipText : item.displayName
               textFormat: Text.PlainText
-              color: Color.tooltip.text
-              font.family: Style.font.family
-              font.pixelSize: Style.font.caption
+              color: tipStyle.fg
+              font.family: tipStyle.family === "" ? Style.font.family : tipStyle.family
+              font.pixelSize: tipStyle.px > 0 ? tipStyle.px : Style.font.caption
+              font.weight: tipStyle.weight
               font.bold: root ? (root.advancedTooltips && item.running) : false
               horizontalAlignment: Text.AlignHCenter
               anchors.horizontalCenter: parent.horizontalCenter
@@ -655,9 +670,9 @@ Item {
               horizontalAlignment: Text.AlignHCenter
               text: (cardStack.wanted && root) ? root.windowRowLabel(item.tooltipWindows[cardStack.frontIndex]) : ""
               textFormat: Text.PlainText
-              color: Util.alpha(Color.tooltip.text, 0.80)
-              font.family: Style.font.family
-              font.pixelSize: Math.max(10, Style.font.caption - 1)
+              color: Util.alpha(tipStyle.fg, 0.80)
+              font.family: tipStyle.family === "" ? Style.font.family : tipStyle.family
+              font.pixelSize: Math.max(10, (tipStyle.px > 0 ? tipStyle.px : Style.font.caption) - 1)
               elide: Text.ElideRight
               maximumLineCount: 1
             }
@@ -676,7 +691,7 @@ Item {
                   height: Style.space(5)
                   radius: width / 2
                   anchors.verticalCenter: parent.verticalCenter
-                  color: isSelected ? Color.accent : (isWinFocused ? Color.accent : Util.alpha(Color.tooltip.text, 0.5))
+                  color: isSelected ? Color.accent : (isWinFocused ? Color.accent : Util.alpha(tipStyle.fg, 0.5))
                   border.color: isSelected ? Color.accent : "transparent"
                   border.width: 1
                 }
@@ -690,9 +705,9 @@ Item {
                     return str.length > 32 ? str.slice(0, 30) + "…" : str
                   }
                   textFormat: Text.PlainText
-                  color: isSelected ? Color.accent : (isWinFocused ? Color.tooltip.text : Util.alpha(Color.tooltip.text, 0.80))
-                  font.family: Style.font.family
-                  font.pixelSize: Math.max(10, Style.font.caption - 1)
+                  color: isSelected ? Color.accent : (isWinFocused ? tipStyle.fg : Util.alpha(tipStyle.fg, 0.80))
+                  font.family: tipStyle.family === "" ? Style.font.family : tipStyle.family
+                  font.pixelSize: Math.max(10, (tipStyle.px > 0 ? tipStyle.px : Style.font.caption) - 1)
                   font.bold: isSelected || isWinFocused
                   elide: Text.ElideRight
                   maximumLineCount: 1
@@ -705,9 +720,9 @@ Item {
               anchors.horizontalCenter: parent.horizontalCenter
               text: "+" + (item.tooltipWindows.length - 8) + " more"
               textFormat: Text.PlainText
-              color: Util.alpha(Color.tooltip.text, 0.6)
-              font.family: Style.font.family
-              font.pixelSize: Math.max(9, Style.font.caption - 3)
+              color: Util.alpha(tipStyle.fg, 0.6)
+              font.family: tipStyle.family === "" ? Style.font.family : tipStyle.family
+              font.pixelSize: Math.max(9, (tipStyle.px > 0 ? tipStyle.px : Style.font.caption) - 3)
             }
           }
         }
