@@ -571,7 +571,7 @@ Item {
       readonly property string family: ""                       // "" = Style.font.family
       readonly property int px: 13                              // 主题 caption = 10px
       readonly property int weight: Font.Medium
-      readonly property color bg: Util.alpha("#1C1C1E", 0.86)    // 主题 Color.tooltip.background 是 @0.97 实底
+      readonly property color bg: Util.alpha("#1C1C1E", 0.60)    // 主题 Color.tooltip.background 是 @0.97 实底
       readonly property color fg: "#F5F5F7"
       readonly property int radius: 8
       readonly property real borderAlpha: 0.0                   // 1 = 保留主题描边
