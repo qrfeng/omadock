@@ -3,6 +3,7 @@ import qs.Commons
 import qs.Ui
 
 import Quickshell
+import "../../Locale.js" as I18n
 
 // Settings page: version, update channel, supporters and contributors.
 // Instantiated by SettingsPanel, which injects root (the Dock, for
@@ -17,8 +18,8 @@ Column {
   SectionLabel { text: "omadock" }
 
   SettingRow {
-    label: "Version"
-    hint: "Free and open-source application dock for Omarchy · MIT license"
+    label: I18n.t("Version")
+    hint: I18n.t("Free and open-source application dock for Omarchy · MIT license")
     Text {
       text: (root && root.manifest && root.manifest.version) ? "v" + root.manifest.version : "unknown"
       textFormat: Text.PlainText
@@ -28,22 +29,22 @@ Column {
     }
   }
   SettingRow {
-    label: "Project & feedback"
-    hint: "Report bugs, follow development, or contribute."
+    label: I18n.t("Project & feedback")
+    hint: I18n.t("Report bugs, follow development, or contribute.")
     Button {
-      text: "GitHub"
+      text: I18n.t("GitHub")
       foreground: Color.menu.text
       bordered: true
       onClicked: Util.execDetached("uwsm-app -- xdg-open " + Util.shellQuote("https://github.com/thepathless/omadock"))
     }
   }
 
-  SectionLabel { text: "Updates" }
+  SectionLabel { text: I18n.t("Updates") }
   ChoiceRow {
     key: "updateChannel"
-    label: "Update channel"
-    hint: "Stable receives verified releases; Experimental gets features early. Switching reloads the shell immediately."
-    options: [{ value: "stable", label: "Stable" }, { value: "experiment", label: "Experimental" }]
+    label: I18n.t("Update channel")
+    hint: I18n.t("Stable receives verified releases; Experimental gets features early. Switching reloads the shell immediately.")
+    options: [{ value: "stable", label: I18n.t("Stable") }, { value: "experiment", label: I18n.t("Experimental") }]
     value: panel.channel !== "" ? panel.channel : "stable"
     onPicked: function(v) {
       if (panel.channel === "" || v === panel.channel) return
@@ -51,13 +52,13 @@ Column {
     }
   }
 
-  SectionLabel { text: "Supporters & acknowledgments" }
+  SectionLabel { text: I18n.t("Supporters & acknowledgments") }
 
   Text {
     width: parent.width
     topPadding: Style.spacing.lg
     bottomPadding: Style.spacing.lg
-    text: "omadock is built with love by thepathless — a medical student, between classes and clinics. It is free, and it always will be.\n\nIf it earns a place on your desktop, you can give some love back to its maker. No tiers, no perks — just support returned."
+    text: I18n.t("omadock is built with love by thepathless — a medical student, between classes and clinics. It is free, and it always will be.\n\nIf it earns a place on your desktop, you can give some love back to its maker. No tiers, no perks — just support returned.")
     textFormat: Text.PlainText
     color: Color.menu.text
     wrapMode: Text.WordWrap
@@ -66,11 +67,11 @@ Column {
   }
 
   SettingRow {
-    label: "Supporter #1 — thepathless"
-    hint: "The maker. Its first and forever supporter."
+    label: I18n.t("Supporter #1 — thepathless")
+    hint: I18n.t("The maker. Its first and forever supporter.")
 
     Button {
-      text: "Support ❤"
+      text: I18n.t("Support ❤")
       foreground: Color.menu.text
       bordered: true
       onClicked: Util.execDetached("uwsm-app -- xdg-open " + Util.shellQuote("https://github.com/sponsors/thepathless"))
@@ -78,25 +79,25 @@ Column {
   }
 
   SettingRow {
-    label: "Supporters wall"
-    hint: "Everyone who has supported omadock, honored in the repository."
+    label: I18n.t("Supporters wall")
+    hint: I18n.t("Everyone who has supported omadock, honored in the repository.")
 
     Button {
-      text: "View wall"
+      text: I18n.t("View wall")
       foreground: Color.menu.text
       bordered: true
       onClicked: Util.execDetached("uwsm-app -- xdg-open " + Util.shellQuote("https://github.com/thepathless/omadock/blob/main/SPONSORS.md"))
     }
   }
 
-  SectionLabel { text: "Code Contributors" }
+  SectionLabel { text: I18n.t("Code Contributors") }
 
   SettingRow {
     label: "@priard (Lukasz)"
-    hint: "macOS folder stacks, icon shaders, gradients, grain, drop-to-open"
+    hint: I18n.t("macOS folder stacks, icon shaders, gradients, grain, drop-to-open")
 
     Button {
-      text: "GitHub ↗"
+      text: I18n.t("GitHub ↗")
       foreground: Color.menu.text
       bordered: true
       onClicked: Util.execDetached("uwsm-app -- xdg-open " + Util.shellQuote("https://github.com/priard"))
@@ -105,10 +106,10 @@ Column {
 
   SettingRow {
     label: "@G-Pappas (George P.)"
-    hint: "Multi-monitor docks & per-output instance management"
+    hint: I18n.t("Multi-monitor docks & per-output instance management")
 
     Button {
-      text: "GitHub ↗"
+      text: I18n.t("GitHub ↗")
       foreground: Color.menu.text
       bordered: true
       onClicked: Util.execDetached("uwsm-app -- xdg-open " + Util.shellQuote("https://github.com/G-Pappas"))
@@ -117,10 +118,10 @@ Column {
 
   SettingRow {
     label: "@NothingManTR (Taha Can)"
-    hint: "Removable media drives & safe eject, smart app matching, jump lists"
+    hint: I18n.t("Removable media drives & safe eject, smart app matching, jump lists")
 
     Button {
-      text: "GitHub ↗"
+      text: I18n.t("GitHub ↗")
       foreground: Color.menu.text
       bordered: true
       onClicked: Util.execDetached("uwsm-app -- xdg-open " + Util.shellQuote("https://github.com/NothingManTR"))
@@ -129,10 +130,10 @@ Column {
 
   SettingRow {
     label: "@assada"
-    hint: "Window focus dispatch & Hyprland layout awareness"
+    hint: I18n.t("Window focus dispatch & Hyprland layout awareness")
 
     Button {
-      text: "GitHub ↗"
+      text: I18n.t("GitHub ↗")
       foreground: Color.menu.text
       bordered: true
       onClicked: Util.execDetached("uwsm-app -- xdg-open " + Util.shellQuote("https://github.com/assada"))
@@ -141,10 +142,10 @@ Column {
 
   SettingRow {
     label: "@tdslot"
-    hint: "Desktop entry launch suffix validation fix for pinned apps"
+    hint: I18n.t("Desktop entry launch suffix validation fix for pinned apps")
 
     Button {
-      text: "GitHub ↗"
+      text: I18n.t("GitHub ↗")
       foreground: Color.menu.text
       bordered: true
       onClicked: Util.execDetached("uwsm-app -- xdg-open " + Util.shellQuote("https://github.com/tdslot"))
@@ -153,24 +154,24 @@ Column {
 
   SettingRow {
     label: "@Tech0001"
-    hint: "Application matching restoration"
+    hint: I18n.t("Application matching restoration")
 
     Button {
-      text: "GitHub ↗"
+      text: I18n.t("GitHub ↗")
       foreground: Color.menu.text
       bordered: true
       onClicked: Util.execDetached("uwsm-app -- xdg-open " + Util.shellQuote("https://github.com/Tech0001"))
     }
   }
 
-  SectionLabel { text: "Bug Hunters & Diagnostics" }
+  SectionLabel { text: I18n.t("Bug Hunters & Diagnostics") }
 
   SettingRow {
     label: "@justinlharter"
-    hint: "Suspend/resume screen null recovery diagnostics"
+    hint: I18n.t("Suspend/resume screen null recovery diagnostics")
 
     Button {
-      text: "GitHub ↗"
+      text: I18n.t("GitHub ↗")
       foreground: Color.menu.text
       bordered: true
       onClicked: Util.execDetached("uwsm-app -- xdg-open " + Util.shellQuote("https://github.com/justinlharter"))
@@ -179,10 +180,10 @@ Column {
 
   SettingRow {
     label: "@maugustoldo (Marcos Augusto)"
-    hint: "GTK icon resolving, launcher matching, and theme accent"
+    hint: I18n.t("GTK icon resolving, launcher matching, and theme accent")
 
     Button {
-      text: "GitHub ↗"
+      text: I18n.t("GitHub ↗")
       foreground: Color.menu.text
       bordered: true
       onClicked: Util.execDetached("uwsm-app -- xdg-open " + Util.shellQuote("https://github.com/maugustoldo"))
@@ -191,10 +192,10 @@ Column {
 
   SettingRow {
     label: "@m-bowden (Michael Bowden)"
-    hint: "Webapp Exec-URL .execString desktop entry investigation"
+    hint: I18n.t("Webapp Exec-URL .execString desktop entry investigation")
 
     Button {
-      text: "GitHub ↗"
+      text: I18n.t("GitHub ↗")
       foreground: Color.menu.text
       bordered: true
       onClicked: Util.execDetached("uwsm-app -- xdg-open " + Util.shellQuote("https://github.com/m-bowden"))
@@ -203,10 +204,10 @@ Column {
 
   SettingRow {
     label: "@herman6888"
-    hint: "Omarchy 4.x overlay plugin appLibrary diagnostic"
+    hint: I18n.t("Omarchy 4.x overlay plugin appLibrary diagnostic")
 
     Button {
-      text: "GitHub ↗"
+      text: I18n.t("GitHub ↗")
       foreground: Color.menu.text
       bordered: true
       onClicked: Util.execDetached("uwsm-app -- xdg-open " + Util.shellQuote("https://github.com/herman6888"))

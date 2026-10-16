@@ -1,6 +1,7 @@
 import QtQuick 6.11
 import qs.Commons
 import qs.Ui
+import "../Locale.js" as I18n
 
 // "»": the end of a row that did not fit (DockFit.js). It stands for the
 // items the dock's fit moved into the overflow popup (DockFitHost).
@@ -72,7 +73,7 @@ Item {
 
   HoverTooltip {
     dockRoot: tile.root
-    text: tile.count + " more"
+    text: I18n.fmt("%1 more", tile.count)
     hovered: area.containsMouse
     blocked: !tile.root || !tile.root.showTooltips
     showTooltips: tile.root ? tile.root.showTooltips : true

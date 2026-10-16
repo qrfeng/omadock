@@ -2,6 +2,7 @@ import QtQuick 6.11
 import qs.Commons
 import qs.Ui
 import "../../DockLabels.js" as DockLabels
+import "../../Locale.js" as I18n
 
 // Settings page: name labels beside the dock icons — when they show, how
 // they look, and per-app names. Instantiated by SettingsPanel, which injects
@@ -28,16 +29,16 @@ Column {
   }
   Component.onCompleted: labelsPage.refreshNameRows()
 
-  SectionLabel { text: "Labels" }
+  SectionLabel { text: I18n.t("Labels") }
 
   ChoiceRow {
     key: "labelMode"
-    label: "Labels"
-    hint: "Names beside the icons: always, or slid out while the pointer rests on an icon."
+    label: I18n.t("Labels")
+    hint: I18n.t("Names beside the icons: always, or slid out while the pointer rests on an icon.")
     options: [
-      { value: "off", label: "Off" },
-      { value: "always", label: "Always" },
-      { value: "hover", label: "On hover" }
+      { value: "off", label: I18n.t("Off") },
+      { value: "always", label: I18n.t("Always") },
+      { value: "hover", label: I18n.t("On hover") }
     ]
     value: root ? root.labelMode : "off"
     onPicked: function(v) { root.setOption("labelMode", v) }
@@ -49,157 +50,157 @@ Column {
 
     ChoiceRow {
       key: "labelKind"
-      label: "Show on"
+      label: I18n.t("Show on")
       options: [
-        { value: "all", label: "All" },
-        { value: "apps", label: "Apps" },
-        { value: "groups", label: "App groups" },
-        { value: "folders", label: "Folders" }
+        { value: "all", label: I18n.t("All") },
+        { value: "apps", label: I18n.t("Apps") },
+        { value: "groups", label: I18n.t("App groups") },
+        { value: "folders", label: I18n.t("Folders") }
       ]
       value: root ? root.labelKind : "all"
       onPicked: function(v) { root.setOption("labelKind", v) }
     }
     ChoiceRow {
       key: "labelPinned"
-      label: "Pinned apps"
-      hint: "When running shows a pinned app's name only while it has a window; a closed one keeps just its icon."
+      label: I18n.t("Pinned apps")
+      hint: I18n.t("When running shows a pinned app's name only while it has a window; a closed one keeps just its icon.")
       visible: root ? (root.labelMode === "always" && (root.labelKind === "all" || root.labelKind === "apps")) : false
       options: [
-        { value: "always", label: "Always" },
-        { value: "running", label: "When running" }
+        { value: "always", label: I18n.t("Always") },
+        { value: "running", label: I18n.t("When running") }
       ]
       value: root ? root.labelPinned : "always"
       onPicked: function(v) { root.setOption("labelPinned", v) }
     }
 
-    SectionLabel { text: "Look" }
+    SectionLabel { text: I18n.t("Look") }
 
     ChoiceRow {
       key: "labelFont"
-      label: "Font"
+      label: I18n.t("Font")
       options: [
-        { value: "theme", label: "Theme" },
-        { value: "sans", label: "Sans" },
-        { value: "pixel", label: "Pixel" }
+        { value: "theme", label: I18n.t("Theme") },
+        { value: "sans", label: I18n.t("Sans") },
+        { value: "pixel", label: I18n.t("Pixel") }
       ]
       value: root ? root.labelFont : "theme"
       onPicked: function(v) { root.setOption("labelFont", v) }
     }
     ChoiceRow {
       key: "labelSize"
-      label: "Size"
+      label: I18n.t("Size")
       options: [
-        { value: "small", label: "Small" },
-        { value: "medium", label: "Medium" },
-        { value: "large", label: "Large" }
+        { value: "small", label: I18n.t("Small") },
+        { value: "medium", label: I18n.t("Medium") },
+        { value: "large", label: I18n.t("Large") }
       ]
       value: root ? root.labelSize : "medium"
       onPicked: function(v) { root.setOption("labelSize", v) }
     }
     ChoiceRow {
       key: "labelWeight"
-      label: "Weight"
+      label: I18n.t("Weight")
       visible: root ? root.labelFont !== "pixel" : true
       options: [
-        { value: "regular", label: "Regular" },
-        { value: "medium", label: "Medium" },
-        { value: "bold", label: "Bold" }
+        { value: "regular", label: I18n.t("Regular") },
+        { value: "medium", label: I18n.t("Medium") },
+        { value: "bold", label: I18n.t("Bold") }
       ]
       value: root ? root.labelWeight : "medium"
       onPicked: function(v) { root.setOption("labelWeight", v) }
     }
     ChoiceRow {
       key: "labelColor"
-      label: "Color"
-      hint: "Auto picks black or white for what is behind the icons; Theme uses the bar's text colour."
+      label: I18n.t("Color")
+      hint: I18n.t("Auto picks black or white for what is behind the icons; Theme uses the bar's text colour.")
       options: [
-        { value: "auto", label: "Auto" },
-        { value: "theme", label: "Theme" },
-        { value: "accent", label: "Accent" }
+        { value: "auto", label: I18n.t("Auto") },
+        { value: "theme", label: I18n.t("Theme") },
+        { value: "accent", label: I18n.t("Accent") }
       ]
       value: root ? root.labelColor : "auto"
       onPicked: function(v) { root.setOption("labelColor", v) }
     }
     ChoiceRow {
       key: "labelBackground"
-      label: "Background"
-      hint: "Plate puts icon and name on one surface, like a button."
+      label: I18n.t("Background")
+      hint: I18n.t("Plate puts icon and name on one surface, like a button.")
       visible: root ? root.labelMode !== "hover" : true
       options: [
-        { value: "none", label: "None" },
-        { value: "pill", label: "Pill" },
-        { value: "plate", label: "Plate" }
+        { value: "none", label: I18n.t("None") },
+        { value: "pill", label: I18n.t("Pill") },
+        { value: "plate", label: I18n.t("Plate") }
       ]
       value: root ? root.labelBackground : "none"
       onPicked: function(v) { root.setOption("labelBackground", v) }
     }
     ChoiceRow {
       key: "labelShape"
-      label: "Corners"
-      hint: "Dock follows the dock's own corners. Square meets between plates and rounds the outer ones along the dock's edge; Pill gives every plate round ends."
+      label: I18n.t("Corners")
+      hint: I18n.t("Dock follows the dock's own corners. Square meets between plates and rounds the outer ones along the dock's edge; Pill gives every plate round ends.")
       visible: root ? (root.labelBackground !== "none" || root.labelMode === "hover") : true
       options: [
-        { value: "dock", label: "Dock" },
-        { value: "pill", label: "Pill" },
-        { value: "rounded", label: "Rounded" },
-        { value: "square", label: "Square" }
+        { value: "dock", label: I18n.t("Dock") },
+        { value: "pill", label: I18n.t("Pill") },
+        { value: "rounded", label: I18n.t("Rounded") },
+        { value: "square", label: I18n.t("Square") }
       ]
       value: root ? root.labelShape : "dock"
       onPicked: function(v) { root.setOption("labelShape", v) }
     }
     ChoiceRow {
       key: "labelPlateHeight"
-      label: "Plate height"
-      hint: "Dock stretches plates to the dock's top and bottom, the same gap away as from each other."
+      label: I18n.t("Plate height")
+      hint: I18n.t("Dock stretches plates to the dock's top and bottom, the same gap away as from each other.")
       visible: root ? (root.labelBackground === "plate" && root.labelMode === "always") : false
       options: [
-        { value: "icon", label: "Icon" },
-        { value: "dock", label: "Dock" }
+        { value: "icon", label: I18n.t("Icon") },
+        { value: "dock", label: I18n.t("Dock") }
       ]
       value: root ? root.labelPlateHeight : "icon"
       onPicked: function(v) { root.setOption("labelPlateHeight", v) }
     }
     ChoiceRow {
       key: "labelIndicators"
-      label: "Indicators"
-      hint: "Window marks as a column at the plate's edge, so every plate lines up."
+      label: I18n.t("Indicators")
+      hint: I18n.t("Window marks as a column at the plate's edge, so every plate lines up.")
       visible: root ? (root.labelBackground === "plate" && root.labelMode === "always") : false
       options: [
-        { value: "before", label: "Before icon" },
-        { value: "after", label: "After name" },
-        { value: "under", label: "Under icon" }
+        { value: "before", label: I18n.t("Before icon") },
+        { value: "after", label: I18n.t("After name") },
+        { value: "under", label: I18n.t("Under icon") }
       ]
       value: root ? root.labelIndicators : "before"
       onPicked: function(v) { root.setOption("labelIndicators", v) }
     }
     ChoiceRow {
       key: "labelReveal"
-      label: "Reveal"
-      hint: "How a name appears when the pointer rests on an icon."
+      label: I18n.t("Reveal")
+      hint: I18n.t("How a name appears when the pointer rests on an icon.")
       visible: root ? root.labelMode === "hover" : false
       options: [
-        { value: "slide", label: "Slide" },
-        { value: "typewriter", label: "Typewriter" },
-        { value: "scramble", label: "Scramble" }
+        { value: "slide", label: I18n.t("Slide") },
+        { value: "typewriter", label: I18n.t("Typewriter") },
+        { value: "scramble", label: I18n.t("Scramble") }
       ]
       value: root ? root.labelReveal : "slide"
       onPicked: function(v) { root.setOption("labelReveal", v) }
     }
     ChoiceRow {
       key: "labelEffect"
-      label: "Effect"
+      label: I18n.t("Effect")
       options: [
-        { value: "none", label: "None" },
-        { value: "glow", label: "Glow" },
-        { value: "outline", label: "Outline" }
+        { value: "none", label: I18n.t("None") },
+        { value: "glow", label: I18n.t("Glow") },
+        { value: "outline", label: I18n.t("Outline") }
       ]
       value: root ? root.labelEffect : "none"
       onPicked: function(v) { root.setOption("labelEffect", v) }
     }
     SliderRow {
       key: "labelMaxWidth"
-      label: "Max width"
-      hint: "Longer names drop subtitles, then trailing words, then end in an ellipsis."
+      label: I18n.t("Max width")
+      hint: I18n.t("Longer names drop subtitles, then trailing words, then end in an ellipsis.")
       minimum: DockLabels.LABEL_MAX_WIDTH_MIN
       maximum: DockLabels.LABEL_MAX_WIDTH_MAX
       step: 10
@@ -208,7 +209,7 @@ Column {
       onCommitted: function(v) { root.setOption("labelMaxWidth", Math.round(v)) }
     }
 
-    SectionLabel { text: "Names"; visible: root ? root.labelKind === "all" || root.labelKind === "apps" : false }
+    SectionLabel { text: I18n.t("Names"); visible: root ? root.labelKind === "all" || root.labelKind === "apps" : false }
 
     Repeater {
       model: (root && (root.labelKind === "all" || root.labelKind === "apps")) ? labelsPage.nameRows : []

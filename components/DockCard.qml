@@ -8,6 +8,7 @@ import "../DockModel.js" as DockModel
 import "../DockLabels.js" as DockLabels
 import "../DockLayout.js" as DockLayout
 import "../DockKeys.js" as DockKeys
+import "../Locale.js" as I18n
 
 Item {
   id: cardWrapper
@@ -715,7 +716,7 @@ Item {
       Text {
         id: removeLabel
         anchors.centerIn: parent
-        text: root && root.dragGroupId !== "" ? "Remove group" : "Unpin"
+        text: I18n.tr(root && root.dragGroupId !== "" ? "Remove group" : "Unpin", root ? root.language : "")
         textFormat: Text.PlainText
         color: "#F5F5F7"
         font.family: Style.font.family

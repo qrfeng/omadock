@@ -66,7 +66,7 @@ BorderSurface {
 
         Text {
           id: titleLabel
-          text: (appGroupPopup.activeGroup && appGroupPopup.activeGroup.name) ? appGroupPopup.activeGroup.name : "Folder"
+          text: (appGroupPopup.activeGroup && appGroupPopup.activeGroup.name) ? appGroupPopup.activeGroup.name : I18n.t("Folder")
           textFormat: Text.PlainText
           color: Color.menu.text
           font.family: Style.font.family

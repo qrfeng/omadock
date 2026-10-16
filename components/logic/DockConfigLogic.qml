@@ -1,10 +1,12 @@
 import QtQuick
+import Quickshell
 import "../../DockModel.js" as DockModel
 import "../../DockPresets.js" as DockPresets
 import "../../Buttons.js" as Buttons
 import "../../DockLabels.js" as DockLabels
 import "../../DockLayout.js" as DockLayout
 import "../../DockMotion.js" as DockMotion
+import "../../Locale.js" as I18n
 
 // Config and preset logic, extracted from Dock.qml so the root file only
 // declares state and wiring. Every function is stateless: the dock root is
@@ -106,6 +108,11 @@ QtObject {
       }
     }
     root.alignment = DockLayout.normalizeAlignment(parsed ? (parsed.alignment || parsed.position) : "")
+    // Language before anything else: it decides how the labels of every
+    // surface opened afterwards read. A preset goes through applyLook, not
+    // here, so applying one never changes the language.
+    root.language = (parsed && typeof parsed.language === "string") ? parsed.language : "auto"
+    I18n.setLang(I18n.resolveLang(root.language, Quickshell.env("LANG") || ""))
     root.layout = DockLayout.normalizeLayout(parsed ? parsed.layout : "")
     root.showRemovableDrives = parsed ? parsed.showRemovableDrives !== false : true
     root.warnUnsafeRemoval = parsed ? parsed.warnUnsafeRemoval !== false : true
@@ -179,6 +186,7 @@ QtObject {
   function buildConfig(root, base) {
     var conf = base && typeof base === "object" && !Array.isArray(base) ? base : {}
     conf.alignment = root.alignment || "center"
+    conf.language = root.language || "auto"
     conf.layout = root.layout
     delete conf.position
     conf.showRemovableDrives = root.showRemovableDrives

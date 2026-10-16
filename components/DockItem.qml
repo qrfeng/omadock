@@ -5,6 +5,7 @@ import qs.Ui
 import "../DockModel.js" as DockModel
 import "../DockLabels.js" as DockLabels
 import "../DockTasks.js" as DockTasks
+import "../Locale.js" as I18n
 
 Item {
   id: item
@@ -753,7 +754,7 @@ Item {
             Text {
               visible: root ? (!root.advancedTooltips && item.tooltipWindows.length > 8) : false
               anchors.horizontalCenter: parent.horizontalCenter
-              text: "+" + (item.tooltipWindows.length - 8) + " more"
+              text: I18n.fmt("+%1 more", item.tooltipWindows.length - 8)
               textFormat: Text.PlainText
               color: Util.alpha(tipStyle.fg, 0.6)
               font.family: tipStyle.family === "" ? Style.font.family : tipStyle.family

@@ -1,6 +1,7 @@
 import QtQuick
 import qs.Commons
 import qs.Ui
+import "../../Locale.js" as I18n
 
 // Settings page: visibility, click behaviour, attention and tooltip rows.
 // Instantiated by SettingsPanel, which injects root (the Dock, for
@@ -12,24 +13,48 @@ Column {
   width: parent.width
 
 
-  SectionLabel { text: "Visibility" }
+  SectionLabel { text: I18n.t("Language") }
+
+  ChoiceRow {
+    key: "language"
+    label: I18n.t("Language")
+    hint: I18n.t("Follow system uses the shell locale (LANG). Changing it reloads the shell immediately.")
+    options: [
+      { value: "auto", label: I18n.t("Follow system") },
+      // Language names in their own language, as every picker does.
+      { value: "en", label: "English" },
+      { value: "zh", label: "中文" }
+    ]
+    value: root ? root.language : "auto"
+    onPicked: function(v) {
+      if (!root || v === root.language) return
+      root.setOption("language", v)
+      // Labels are resolved once when a surface is built, so the whole shell
+      // has to come back for the change to read everywhere - the same thing
+      // switching the update channel does. The setting is already saved, so
+      // nothing is lost if the reload is refused (a locked session).
+      Quickshell.execDetached(["omarchy-restart-shell"])
+    }
+  }
+
+  SectionLabel { text: I18n.t("Visibility") }
 
   ChoiceRow {
     key: "autohide"
-    label: "Autohide"
-    hint: "Intelligent hides only when a window overlaps the dock."
+    label: I18n.t("Autohide")
+    hint: I18n.t("Intelligent hides only when a window overlaps the dock.")
     options: [
-      { value: "always", label: "Always show" },
-      { value: "intelligent", label: "Intelligent" },
-      { value: "autohide", label: "Autohide" }
+      { value: "always", label: I18n.t("Always show") },
+      { value: "intelligent", label: I18n.t("Intelligent") },
+      { value: "autohide", label: I18n.t("Autohide") }
     ]
     value: root ? (!root.autohide ? "always" : (root.intelligentAutohide ? "intelligent" : "autohide")) : "always"
     onPicked: function(v) { root.setAutohideMode(v) }
   }
   SliderRow {
     key: "revealDelay"
-    label: "Reveal delay"
-    hint: "How long the pointer rests on the edge before the dock slides in."
+    label: I18n.t("Reveal delay")
+    hint: I18n.t("How long the pointer rests on the edge before the dock slides in.")
     enabled: root ? root.autohide : false
     opacity: enabled ? 1 : 0.45
     minimum: 0
@@ -40,49 +65,49 @@ Column {
     onCommitted: function(v) { root.setOption("revealDelay", Math.round(v)) }
   }
 
-  SectionLabel { text: "Clicking an app" }
+  SectionLabel { text: I18n.t("Clicking an app") }
 
   ChoiceRow {
     key: "minimizeMode"
-    label: "Minimize on click"
-    hint: "Clicking the focused app's icon parks its windows."
+    label: I18n.t("Minimize on click")
+    hint: I18n.t("Clicking the focused app's icon parks its windows.")
     options: [
-      { value: "off", label: "Off" },
-      { value: "active", label: "Active window" },
-      { value: "all", label: "All windows" }
+      { value: "off", label: I18n.t("Off") },
+      { value: "active", label: I18n.t("Active window") },
+      { value: "all", label: I18n.t("All windows") }
     ]
     value: root ? root.minimizeMode : "active"
     onPicked: function(v) { root.setOption("minimizeMode", v) }
   }
   SwitchRow {
     key: "keepPointer"
-    label: "Keep pointer in place"
-    hint: "Don't move the mouse pointer onto the window a click brings up."
+    label: I18n.t("Keep pointer in place")
+    hint: I18n.t("Don't move the mouse pointer onto the window a click brings up.")
     checked: root ? root.keepPointer : true
     onToggled: root.setOption("keepPointer", !root.keepPointer)
   }
   ChoiceRow {
     key: "restoreWorkspace"
-    label: "Restore on"
-    hint: "Where a minimized window comes back to. Windows restores it to the workspace it was minimized from."
+    label: I18n.t("Restore on")
+    hint: I18n.t("Where a minimized window comes back to. Windows restores it to the workspace it was minimized from.")
     options: [
-      { value: "current", label: "Current workspace" },
-      { value: "origin", label: "Original workspace" }
+      { value: "current", label: I18n.t("Current workspace") },
+      { value: "origin", label: I18n.t("Original workspace") }
     ]
     value: root ? root.restoreWorkspace : "current"
     onPicked: function(v) { root.setOption("restoreWorkspace", v) }
   }
   SwitchRow {
     key: "restoreSlot"
-    label: "Restore original slot"
-    hint: "Put the window back in the place it held in the tiling layout, not at the end. Only when the layout has not changed in the meantime."
+    label: I18n.t("Restore original slot")
+    hint: I18n.t("Put the window back in the place it held in the tiling layout, not at the end. Only when the layout has not changed in the meantime.")
     checked: root ? root.restoreSlot : false
     onToggled: root.setOption("restoreSlot", !root.restoreSlot)
   }
   SliderRow {
     key: "wheelStepDelay"
-    label: "Wheel step delay"
-    hint: "Scrolling over an app flips through its windows; this paces the steps."
+    label: I18n.t("Wheel step delay")
+    hint: I18n.t("Scrolling over an app flips through its windows; this paces the steps.")
     minimum: 0
     maximum: 500
     step: 10
@@ -91,22 +116,22 @@ Column {
     onCommitted: function(v) { root.setOption("wheelStepDelay", Math.round(v)) }
   }
 
-  SectionLabel { text: "Attention" }
+  SectionLabel { text: I18n.t("Attention") }
 
   SwitchRow {
     key: "badges"
-    label: "Notification badges"
-    hint: "Count active notification popups on pinned apps; clears on dismissal or expiry."
+    label: I18n.t("Notification badges")
+    hint: I18n.t("Count active notification popups on pinned apps; clears on dismissal or expiry.")
     checked: root ? root.showNotificationBadges : true
     onToggled: root.setOption("showNotificationBadges", !root.showNotificationBadges)
   }
   ChoiceRow {
     key: "badgeStyle"
-    label: "Badge style"
-    hint: "A count pill or a plain dot on the icon."
+    label: I18n.t("Badge style")
+    hint: I18n.t("A count pill or a plain dot on the icon.")
     options: [
-      { value: "count", label: "Count" },
-      { value: "dot", label: "Dot" }
+      { value: "count", label: I18n.t("Count") },
+      { value: "dot", label: I18n.t("Dot") }
     ]
     value: root ? root.badgeStyle : "count"
     enabled: root ? root.showNotificationBadges : false
@@ -115,13 +140,13 @@ Column {
   }
   ChoiceRow {
     key: "badgePosition"
-    label: "Badge position"
-    hint: "The corner of the icon the badge sits on."
+    label: I18n.t("Badge position")
+    hint: I18n.t("The corner of the icon the badge sits on.")
     options: [
-      { value: "top-right", label: "Top right" },
-      { value: "top-left", label: "Top left" },
-      { value: "bottom-right", label: "Bottom right" },
-      { value: "bottom-left", label: "Bottom left" }
+      { value: "top-right", label: I18n.t("Top right") },
+      { value: "top-left", label: I18n.t("Top left") },
+      { value: "bottom-right", label: I18n.t("Bottom right") },
+      { value: "bottom-left", label: I18n.t("Bottom left") }
     ]
     value: root ? root.badgePosition : "top-right"
     enabled: root ? root.showNotificationBadges : false
@@ -130,12 +155,12 @@ Column {
   }
   ChoiceRow {
     key: "badgeColor"
-    label: "Badge color"
-    hint: "Accent, urgent red, or a neutral pill."
+    label: I18n.t("Badge color")
+    hint: I18n.t("Accent, urgent red, or a neutral pill.")
     options: [
-      { value: "accent", label: "Accent" },
-      { value: "urgent", label: "Urgent" },
-      { value: "neutral", label: "Neutral" }
+      { value: "accent", label: I18n.t("Accent") },
+      { value: "urgent", label: I18n.t("Urgent") },
+      { value: "neutral", label: I18n.t("Neutral") }
     ]
     value: root ? root.badgeColor : "accent"
     enabled: root ? root.showNotificationBadges : false
@@ -144,51 +169,51 @@ Column {
   }
   SwitchRow {
     key: "urgentHint"
-    label: "Urgent highlights"
-    hint: "Mark apps whose windows ask for attention."
+    label: I18n.t("Urgent highlights")
+    hint: I18n.t("Mark apps whose windows ask for attention.")
     checked: root ? root.showUrgentHint : true
     onToggled: root.setOption("showUrgentHint", !root.showUrgentHint)
   }
   SwitchRow {
     key: "urgentOnNotification"
-    label: "Urgent on notification"
-    hint: "A notification from an app marks its icon."
+    label: I18n.t("Urgent on notification")
+    hint: I18n.t("A notification from an app marks its icon.")
     checked: root ? root.urgentOnNotification : true
     onToggled: root.setOption("urgentOnNotification", !root.urgentOnNotification)
   }
   SettingRow {
     key: "urgentSound"
-    label: "Urgent sound"
+    label: I18n.t("Urgent sound")
 
     Dropdown {
       width: Style.space(200)
       showLabel: false
       options: [
-        { value: "bell", label: "Bell" },
-        { value: "message-new-instant", label: "Message chime" },
-        { value: "complete", label: "Complete ding" },
-        { value: "dialog-information", label: "Information pop" },
-        { value: "dialog-warning", label: "Warning alert" },
-        { value: "phone-incoming-call", label: "Phone ring" },
-        { value: "alarm-clock-elapsed", label: "Alarm beeps" },
-        { value: "none", label: "Mute" }
+        { value: "bell", label: I18n.t("Bell") },
+        { value: "message-new-instant", label: I18n.t("Message chime") },
+        { value: "complete", label: I18n.t("Complete ding") },
+        { value: "dialog-information", label: I18n.t("Information pop") },
+        { value: "dialog-warning", label: I18n.t("Warning alert") },
+        { value: "phone-incoming-call", label: I18n.t("Phone ring") },
+        { value: "alarm-clock-elapsed", label: I18n.t("Alarm beeps") },
+        { value: "none", label: I18n.t("Mute") }
       ]
       value: root ? (root.urgentSound ? root.urgentSoundName : "none") : "bell"
       onChanged: function(v) { root.setUrgentSoundName(v) }
     }
   }
 
-  SectionLabel { text: "Previews & Tooltips" }
+  SectionLabel { text: I18n.t("Previews & Tooltips") }
 
   SwitchRow {
     key: "tooltips"
-    label: "Tooltips"
+    label: I18n.t("Tooltips")
     checked: root ? root.showTooltips : true
     onToggled: root.setOption("showTooltips", !root.showTooltips)
   }
   SliderRow {
     key: "tooltipDelay"
-    label: "Tooltip delay"
+    label: I18n.t("Tooltip delay")
     enabled: root ? root.showTooltips : true
     opacity: enabled ? 1 : 0.45
     minimum: 0
@@ -200,15 +225,15 @@ Column {
   }
   SwitchRow {
     key: "windowPreviews"
-    label: "Window previews"
-    hint: "Thumbnails of an app's windows in its tooltip; scroll over the icon to flip through them."
+    label: I18n.t("Window previews")
+    hint: I18n.t("Thumbnails of an app's windows in its tooltip; scroll over the icon to flip through them.")
     checked: root ? root.advancedTooltips : true
     onToggled: root.setOption("advancedTooltips", !root.advancedTooltips)
   }
   SwitchRow {
     key: "minimizedTiles"
-    label: "Minimized window tiles"
-    hint: "Show parked windows as preview tiles in the dock."
+    label: I18n.t("Minimized window tiles")
+    hint: I18n.t("Show parked windows as preview tiles in the dock.")
     checked: root ? root.showMinimizedTiles : true
     onToggled: root.setOption("showMinimizedTiles", !root.showMinimizedTiles)
   }

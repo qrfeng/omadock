@@ -4,6 +4,7 @@ import Quickshell
 import qs.Commons
 import qs.Ui
 import "../DockModel.js" as DockModel
+import "../Locale.js" as I18n
 
 Item {
   id: gitem
@@ -416,7 +417,7 @@ Item {
   // Hover tooltip: the member windows as preview cards, like an app's.
   HoverTooltip {
     dockRoot: root
-    text: gitem.groupName + " (" + gitem.groupApps.length + (gitem.groupApps.length === 1 ? " app)" : " apps)")
+    text: gitem.groupName + " (" + gitem.groupApps.length + I18n.t(gitem.groupApps.length === 1 ? " app)" : " apps)")
     windows: gitem.tooltipWindows
     cycleIndex: gitem.previewIndex
     fallbackIcon: Quickshell.iconPath("folder", true)

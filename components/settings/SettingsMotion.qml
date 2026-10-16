@@ -1,6 +1,7 @@
 import QtQuick
 import qs.Commons
 import qs.Ui
+import "../../Locale.js" as I18n
 
 // Settings page: hover motion, launch bounce, shadow and blur/grain rows.
 // Instantiated by SettingsPanel, which injects root (the Dock, for
@@ -12,54 +13,54 @@ Column {
   width: parent.width
 
 
-  SectionLabel { text: "Motion" }
+  SectionLabel { text: I18n.t("Motion") }
 
   ChoiceRow {
     key: "animations"
-    label: "Animations"
-    hint: "Reduced keeps short fades and drops movement and bounces. Off changes everything at once."
+    label: I18n.t("Animations")
+    hint: I18n.t("Reduced keeps short fades and drops movement and bounces. Off changes everything at once.")
     options: [
-      { value: "full", label: "Full" },
-      { value: "reduced", label: "Reduced" },
-      { value: "off", label: "Off" }
+      { value: "full", label: I18n.t("Full") },
+      { value: "reduced", label: I18n.t("Reduced") },
+      { value: "off", label: I18n.t("Off") }
     ]
     value: root ? root.animations : "full"
     onPicked: function(v) { root.setOption("animations", v) }
   }
   ChoiceRow {
     key: "hoverEffect"
-    label: "Hover effect"
+    label: I18n.t("Hover effect")
     options: [
-      { value: "zoom", label: "Zoom" },
-      { value: "wave", label: "Wave" },
-      { value: "lift", label: "Lift" },
-      { value: "glow", label: "Glow" },
-      { value: "glitch", label: "Glitch" },
-      { value: "off", label: "None" }
+      { value: "zoom", label: I18n.t("Zoom") },
+      { value: "wave", label: I18n.t("Wave") },
+      { value: "lift", label: I18n.t("Lift") },
+      { value: "glow", label: I18n.t("Glow") },
+      { value: "glitch", label: I18n.t("Glitch") },
+      { value: "off", label: I18n.t("None") }
     ]
     value: root ? root.hoverEffect : "zoom"
     onPicked: function(v) { root.setHoverEffect(v) }
   }
   SwitchRow {
     key: "launchBounce"
-    label: "Launch bounce"
-    hint: "Bounce the icon while an app is starting."
+    label: I18n.t("Launch bounce")
+    hint: I18n.t("Bounce the icon while an app is starting.")
     checked: root ? root.launchBounce : true
     onToggled: root.setOption("launchBounce", !root.launchBounce)
   }
 
-  SectionLabel { text: "Shadow" }
+  SectionLabel { text: I18n.t("Shadow") }
 
   SwitchRow {
     key: "showShadow"
-    label: "Shadow"
-    hint: "Under the dock; with the background off, under each icon."
+    label: I18n.t("Shadow")
+    hint: I18n.t("Under the dock; with the background off, under each icon.")
     checked: root ? root.showShadow : true
     onToggled: root.setOption("showShadow", !root.showShadow)
   }
   SliderRow {
     key: "shadowStrength"
-    label: "Strength"
+    label: I18n.t("Strength")
     visible: root ? root.showShadow : true
     minimum: 0
     maximum: 1
@@ -76,29 +77,29 @@ Column {
     width: parent.width
     visible: root ? root.showBackground : true
 
-    SectionLabel { text: "Blur & Grain" }
+    SectionLabel { text: I18n.t("Blur & Grain") }
 
     SwitchRow {
       key: "blurSystem"
-      label: "Blur from system"
-      hint: "Leave blur behind the dock to your Hyprland layer rules."
+      label: I18n.t("Blur from system")
+      hint: I18n.t("Leave blur behind the dock to your Hyprland layer rules.")
       checked: root ? root.blurMode === "system" : true
       onToggled: root.setBlurMode(root.blurMode === "system" ? "on" : "system")
     }
     SwitchRow {
       key: "blur"
-      label: "Blur"
+      label: I18n.t("Blur")
       hint: panel.systemBlurEnabled
-        ? "Frosted glass behind the dock."
-        : "Hyprland blur is off (decoration:blur:enabled), so this has no visible effect."
+        ? I18n.t("Frosted glass behind the dock.")
+        : I18n.t("Hyprland blur is off (decoration:blur:enabled), so this has no visible effect.")
       visible: root ? root.blurMode !== "system" : false
       checked: root ? root.blurMode === "on" : false
       onToggled: root.setBlurMode(root.blurMode === "on" ? "off" : "on")
     }
     SliderRow {
       key: "blurSize"
-      label: "Blur strength"
-      hint: "Hyprland has one blur size for everything, so this also changes it for windows and other panels. Back to your own value when blur leaves this mode."
+      label: I18n.t("Blur strength")
+      hint: I18n.t("Hyprland has one blur size for everything, so this also changes it for windows and other panels. Back to your own value when blur leaves this mode.")
       visible: root ? root.blurMode === "on" : false
       minimum: 1
       maximum: 20
@@ -108,8 +109,8 @@ Column {
     }
     SliderRow {
       key: "grain"
-      label: "Grain"
-      hint: "Film grain over the background. Works on solid, translucent and blurred backgrounds alike."
+      label: I18n.t("Grain")
+      hint: I18n.t("Film grain over the background. Works on solid, translucent and blurred backgrounds alike.")
       minimum: 0
       maximum: 1
       step: 0.05

@@ -3,6 +3,7 @@ import Quickshell
 import qs.Commons
 import qs.Ui
 import "../DockLabels.js" as DockLabels
+import "../Locale.js" as I18n
 
 // The open folder stack: a fixed header (Back, folder name, entry count), a
 // scrolling body and a fixed footer. The body is a list ("stack" view) or a
@@ -186,7 +187,7 @@ BorderSurface {
       visible: folderStackPopover.entries.length === 0 && !(root && root.activeStackLoading)
       width: parent.width
       horizontalAlignment: Text.AlignHCenter
-      text: (root && root.activeStackFailed) ? "Folder could not be read" : "Folder is empty"
+      text: (root && root.activeStackFailed) ? I18n.t("Folder could not be read") : I18n.t("Folder is empty")
       textFormat: Text.PlainText
       color: Util.alpha(Color.menu.text, 0.45)
       font.family: Style.font.family
@@ -264,7 +265,7 @@ BorderSurface {
     ContextRow {
       readonly property string moreLabel: root ? DockLabels.stackMoreLabel(root.activeStackTotalCount, root.activeStackEntries.length, root.activeStackTruncated) : ""
       visible: moreLabel !== ""
-      text: moreLabel + " — open in File Manager"
+      text: moreLabel + I18n.t(" — open in File Manager")
       onTriggered: {
         if (!root) return
         Util.execArgv(["uwsm-app", "--", "xdg-open", root.activeStackPath])
@@ -273,7 +274,7 @@ BorderSurface {
     }
 
     ContextRow {
-      text: "Open in File Manager"
+      text: I18n.t("Open in File Manager")
       onTriggered: {
         if (!root) return
         Util.execArgv(["uwsm-app", "--", "xdg-open", root.activeStackPath])

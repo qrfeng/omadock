@@ -3,7 +3,9 @@ import qs.Commons
 import qs.Ui
 
 import ".."
+import "../../DockModel.js" as DockModel
 import "../../DockPresets.js" as DockPresets
+import "../../Locale.js" as I18n
 
 // Settings page: the look preset list and save/rename/delete actions.
 // The list holds the shipped looks (DockPresets.js) first, then the ones the
@@ -21,7 +23,7 @@ Column {
     width: parent.width
     SectionLabel {
       key: "presets"
-      text: "Presets"
+      text: I18n.t("Presets")
     }
   }
 
@@ -29,7 +31,7 @@ Column {
     width: parent.width
     topPadding: Style.spacing.xs
     bottomPadding: Style.spacing.lg
-    text: (root ? DockPresets.userCount(root.presets) : 0) + " of 6 saved · the shipped looks come with the dock · A preset keeps the look: background, effects, border, dividers, icons, label style, size and spacing."
+    text: I18n.fmt("%1 of 6 saved · the shipped looks come with the dock · A preset keeps the look: background, effects, border, dividers, icons, label style, size and spacing.", root ? DockPresets.userCount(root.presets) : 0)
     textFormat: Text.PlainText
     color: Util.alpha(Color.menu.text, 0.55)
     wrapMode: Text.WordWrap
@@ -95,7 +97,7 @@ Column {
           color: Qt.rgba(0, 0, 0, 0.45)
           Text {
             anchors.centerIn: parent
-            text: "Apply"
+            text: I18n.t("Apply")
             textFormat: Text.PlainText
             color: "#ffffff"
             font.family: Style.font.family
@@ -165,7 +167,7 @@ Column {
             anchors.verticalCenter: parent.verticalCenter
             width: Math.min(parent.width, Style.space(220))
             maximumLength: 40
-            placeholderText: "Preset name"
+            placeholderText: I18n.t("Preset name")
             foreground: Color.menu.text
             Keys.onReturnPressed: presetRow.finishEdit(true)
             Keys.onEnterPressed: presetRow.finishEdit(true)
@@ -176,7 +178,7 @@ Column {
 
         Text {
           visible: presetRow.builtin
-          text: "shipped with the dock"
+          text: I18n.t("shipped with the dock")
           textFormat: Text.PlainText
           color: Util.alpha(Color.menu.text, 0.5)
           font.family: Style.font.family
@@ -192,26 +194,26 @@ Column {
 
         Button {
           visible: !presetRow.confirming
-          text: "Apply"
+          text: I18n.t("Apply")
           foreground: Color.accent
           onClicked: { panel.endPresetEdit(); root.applyPreset(presetRow.modelData.id) }
         }
         Button {
           visible: !presetRow.confirming && !presetRow.builtin
-          text: "Update"
+          text: I18n.t("Update")
           foreground: Color.menu.text
           onClicked: { panel.endPresetEdit(); root.updatePreset(presetRow.modelData.id) }
         }
         Button {
           visible: !presetRow.confirming && !presetRow.builtin
-          text: "Delete"
+          text: I18n.t("Delete")
           foreground: Color.menu.text
           onClicked: { panel.endPresetEdit(); panel.confirmDeletePresetId = presetRow.modelData.id }
         }
         Button {
           visible: presetRow.confirming
           // Button text is not pinned to PlainText: no name here.
-          text: "Delete?"
+          text: I18n.t("Delete?")
           foreground: Color.urgent
           bordered: true
           onClicked: {
@@ -221,7 +223,7 @@ Column {
         }
         Button {
           visible: presetRow.confirming
-          text: "Keep"
+          text: I18n.t("Keep")
           foreground: Color.menu.text
           onClicked: panel.confirmDeletePresetId = ""
         }
@@ -239,7 +241,7 @@ Column {
   Item { width: 1; height: Style.spacing.xxl }
 
   Button {
-    text: root && root.canSavePreset ? "Save current look" : "6 of 6 — delete one to save a new look"
+    text: root && root.canSavePreset ? I18n.t("Save current look") : I18n.fmt("%1 of %2 — delete one to save a new look", DockModel.MAX_PRESETS, DockModel.MAX_PRESETS)
     foreground: Color.menu.text
     bordered: true
     enabled: root ? root.canSavePreset : false
