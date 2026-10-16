@@ -50,8 +50,16 @@ PanelWindow {
     left: true
   }
 
-  implicitWidth: tip.body ? Math.ceil(tip.body.width) : 0
-  implicitHeight: tip.body ? Math.ceil(tip.body.height + 2 * tip.riseRoom) : 0
+  // 表面尺寸一辈子固定（沿用上游 PopupWindow 的设计）：窗口预览卡片是异步
+  // 长高的，如果图层尺寸跟着 body 变，每一帧都会给 Hyprland 发一次 layer
+  // configure + 重算模糊 + 重算我们的 margins，视觉上就是“慢慢抖动展开”。
+  // 所以尺寸固定，卡片只在表面内部长，底边钉在图标上方。
+  readonly property real maxWidth: Style.space(640)
+  readonly property real maxHeight: Style.space(560)
+
+  implicitWidth: Math.ceil(Math.min(tip.maxWidth,
+    tip.hostWindow ? tip.hostWindow.width - Style.gapsOut * 2 : tip.maxWidth))
+  implicitHeight: Math.ceil(tip.maxHeight)
 
   margins {
     left: {
@@ -69,7 +77,8 @@ PanelWindow {
     }
   }
 
-  // body 贴在窗口底部居中；`rises` 时按 (1 - level) 向下位移，视觉上就是抬起来。
+  // body 在固定尺寸的表面内：底边贴表面底边上方 riseRoom，水平居中。
+  // `rises` 时按 (1 - level) 向下位移，视觉上就是抬起来。
   Binding {
     target: tip.body
     property: "x"
@@ -78,7 +87,8 @@ PanelWindow {
   Binding {
     target: tip.body
     property: "y"
-    value: Math.round(tip.riseRoom + (tip.rises ? (1 - tip.level) * tip.riseRoom : 0))
+    value: Math.round(tip.implicitHeight - (tip.body ? tip.body.height : 0) - tip.riseRoom
+      + (tip.rises ? (1 - tip.level) * tip.riseRoom : 0))
   }
   Binding {
     target: tip.body
