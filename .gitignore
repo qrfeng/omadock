@@ -5,3 +5,6 @@ agent.md
 # Raw screenshot captures
 screenshots/
 __pycache__/
+
+# 手工保存的上游副本，不入库
+*.upstream
