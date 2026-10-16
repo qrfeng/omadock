@@ -8,6 +8,7 @@ import qs.Commons
 import qs.Ui
 import "../../DockModel.js" as DockModel
 import "../../DockIcons.js" as DockIcons
+import "../../Locale.js" as I18n
 
 // Logic extracted from Dock.qml: stateless functions, the dock root
 // is passed in and owns all state. Bodies are verbatim.
@@ -169,7 +170,7 @@ QtObject {
     // installed desktop entry — the pin could only ever bounce silently.
     // Unpinning bypasses the check so stale pins can always be removed.
     if (!DockModel.isPinned(root.pinnedIds, id) && !root.resolveDesktopEntry(id)) {
-      root.notifyAppMissing(id, "It cannot be pinned to the dock — reinstall the app first.")
+      root.notifyAppMissing(id, I18n.t("It cannot be pinned to the dock — reinstall the app first."))
       return
     }
     root.setPinned(DockModel.togglePinned(root.pinnedIds, id))

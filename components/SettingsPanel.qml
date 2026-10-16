@@ -6,6 +6,7 @@ import qs.Commons
 import qs.Ui
 import "../SettingsSearch.js" as SettingsSearch
 import "settings"
+import "../Locale.js" as I18n
 
 // Full-screen overlay holding the dock settings: a sidebar of categories and
 // a scrollable page of controls. Every control writes straight through the
@@ -47,16 +48,16 @@ PanelWindow {
   // Categories in sidebar order. Page ids are also the IPC names
   // (openSettingsPage), so "presets" and "about" keep their ids.
   readonly property var pages: [
-    { id: "appearance", label: "Appearance", glyph: "󰏘" },
-    { id: "labels", label: "Labels", glyph: "󰓹" },
-    { id: "icons", label: "Icons", glyph: "󰩨" },
-    { id: "motion", label: "Motion & Effects", glyph: "󰨙" },
-    { id: "behavior", label: "Behavior", glyph: "󰒓" },
-    { id: "placement", label: "Placement", glyph: "󰍹" },
-    { id: "folders", label: "Folders", glyph: "󰉋" },
-    { id: "groups", label: "App Groups", glyph: "󰀻" },
-    { id: "presets", label: "Presets", glyph: "󰆓" },
-    { id: "about", label: "About", glyph: "󰋼" }
+    { id: "appearance", label: I18n.t("Appearance"), glyph: "󰏘" },
+    { id: "labels", label: I18n.t("Labels"), glyph: "󰓹" },
+    { id: "icons", label: I18n.t("Icons"), glyph: "󰩨" },
+    { id: "motion", label: I18n.t("Motion & Effects"), glyph: "󰨙" },
+    { id: "behavior", label: I18n.t("Behavior"), glyph: "󰒓" },
+    { id: "placement", label: I18n.t("Placement"), glyph: "󰍹" },
+    { id: "folders", label: I18n.t("Folders"), glyph: "󰉋" },
+    { id: "groups", label: I18n.t("App Groups"), glyph: "󰀻" },
+    { id: "presets", label: I18n.t("Presets"), glyph: "󰆓" },
+    { id: "about", label: I18n.t("About"), glyph: "󰋼" }
   ]
 
   // ---------------------------------------------------------- settings search
@@ -64,6 +65,9 @@ PanelWindow {
   // carrying a key is registered under it in registerRows(); a picked hit
   // switches to the row's page and flashes it.
   property var searchHits: []
+  // SETTINGS_SEARCH in both languages: the entries are English, so a query
+  // typed in Chinese would match nothing otherwise. Built once per open.
+  readonly property var searchEntries: I18n.searchEntries(SettingsSearch.SETTINGS_SEARCH)
   property var rowByKey: ({})
   property string flashKey: ""
 
@@ -288,7 +292,7 @@ PanelWindow {
           font.bold: true
         }
         Text {
-          text: "Dock settings"
+          text: I18n.t("Dock settings")
           textFormat: Text.PlainText
           color: Util.alpha(Color.menu.text, 0.55)
           font.family: Style.font.family
@@ -299,9 +303,9 @@ PanelWindow {
         TextField {
           id: searchField
           width: parent.width
-          placeholderText: "Search settings"
+          placeholderText: I18n.t("Search settings")
           foreground: Color.menu.text
-          onTextChanged: panel.searchHits = text.trim() === "" ? [] : SettingsSearch.searchSettings(text)
+          onTextChanged: panel.searchHits = text.trim() === "" ? [] : SettingsSearch.searchSettings(text, panel.searchEntries)
         }
 
         Column {
@@ -326,7 +330,7 @@ PanelWindow {
                 anchors.right: hitWhere.left
                 anchors.rightMargin: Style.spacing.sm
                 anchors.verticalCenter: parent.verticalCenter
-                text: hitRow.modelData.label
+                text: I18n.t(hitRow.modelData.label)
                 textFormat: Text.PlainText
                 elide: Text.ElideRight
                 color: Color.menu.text
@@ -358,7 +362,7 @@ PanelWindow {
             visible: panel.searchHits.length === 0
             topPadding: Style.spacing.sm
             bottomPadding: Style.spacing.sm
-            text: "No matches"
+            text: I18n.t("No matches")
             textFormat: Text.PlainText
             color: Util.alpha(Color.menu.text, 0.55)
             font.family: Style.font.family
@@ -458,7 +462,7 @@ PanelWindow {
         anchors.verticalCenter: parent.verticalCenter
         iconText: "󰅖"
         foreground: Color.menu.text
-        tooltipText: "Close (Esc)"
+        tooltipText: I18n.t("Close (Esc)")
         onClicked: panel.close()
       }
     }

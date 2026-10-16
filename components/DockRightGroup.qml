@@ -3,6 +3,7 @@ import qs.Commons
 import qs.Ui
 import "../DockIcons.js" as DockIcons
 import "../DockKeys.js" as DockKeys
+import "../Locale.js" as I18n
 
 // Folders, command buttons and drives: the right group of the dock's row
 // (DockCard), its own Row so the Both sides gap before it can be sized from
@@ -159,7 +160,7 @@ Row {
         rootRef: group.wrapper.rootRef
         dev: (modelData || {}).dev || ""
         mountpoint: (modelData || {}).mountpoint || ""
-        name: (modelData || {}).name || "USB Drive"
+        name: (modelData || {}).name || I18n.tr("USB Drive", root ? root.language : "")
         size: (modelData || {}).size || ""
         space: (modelData || {}).space || ""
         fstype: (modelData || {}).fstype || ""

@@ -1,6 +1,7 @@
 import QtQuick 6.11
 import qs.Commons
 import qs.Ui
+import "../Locale.js" as I18n
 
 Item {
   id: crow
@@ -97,7 +98,7 @@ Item {
       id: label
       anchors.verticalCenter: parent.verticalCenter
       width: content.width - markContainer.width - content.spacing
-      text: (crow.checked && crow.isWindowRow ? "› " : "") + crow.text
+      text: (crow.checked && crow.isWindowRow ? "› " : "") + I18n.t(crow.text)
       textFormat: Text.PlainText
       color: crow.isHeader
         ? Util.alpha(Color.menu.text, 0.5)

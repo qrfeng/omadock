@@ -4,6 +4,7 @@ import Quickshell
 import qs.Commons
 import qs.Ui
 import "../DockIcons.js" as DockIcons
+import "../Locale.js" as I18n
 
 Item {
   id: ditem
@@ -14,7 +15,7 @@ Item {
 
   property string dev: ""
   property string mountpoint: ""
-  property string name: "USB Drive"
+  property string name: I18n.tr("USB Drive", root ? root.language : "")
   property string size: ""
   property string space: ""
   property string fstype: ""
@@ -166,7 +167,7 @@ Item {
   // Hover tooltip
   HoverTooltip {
     dockRoot: root
-    text: ditem.name + (ditem.space !== "" ? (" (USB • " + ditem.space + ")") : " (USB Drive)")
+    text: ditem.name + (ditem.space !== "" ? (I18n.t(" (USB • ") + ditem.space + ")") : I18n.t(" (USB Drive)"))
     hovered: driveArea.containsMouse
     blocked: (!root || !root.showTooltips || root.activeStackFolder !== "")
     showTooltips: root ? root.showTooltips : true

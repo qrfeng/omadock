@@ -4,6 +4,7 @@ import Quickshell
 import qs.Commons
 import qs.Ui
 import "../DockIcons.js" as DockIcons
+import "../Locale.js" as I18n
 
 Item {
   id: fitem
@@ -222,7 +223,7 @@ Item {
   // Hover tooltip — uses our own HoverTooltip so textFormat: Text.PlainText is enforced.
   HoverTooltip {
     dockRoot: root
-    text: fitem.isButton ? fitem.name : (fitem.name + " (Folder)")
+    text: fitem.isButton ? fitem.name : (fitem.name + I18n.t(" (Folder)"))
     hovered: area.containsMouse
     blocked: (!root || !root.showTooltips || root.activeStackFolder !== "")
       || (root && !root.labelTooltipNeeded("folder", false, false, label.shortened))

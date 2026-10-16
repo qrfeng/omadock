@@ -6,6 +6,7 @@ import qs.Commons
 import qs.Ui
 import "../DockModel.js" as DockModel
 import "../DockLabels.js" as DockLabels
+import "../Locale.js" as I18n
 
 BorderSurface {
   id: contextMenu
@@ -98,27 +99,27 @@ BorderSurface {
       }
 
       ContextRow {
-        text: "Dock Settings…"
+        text: I18n.t("Dock Settings…")
         textColor: Color.accent
         onTriggered: { if (root) root.openSettingsPanel() }
       }
 
       ContextRow {
         visible: root ? root.presets.length > 0 : false
-        text: "Presets ›"
+        text: I18n.t("Presets ›")
         onTriggered: contextMenu.dockPage = "presets"
       }
 
       MenuDivider {}
 
       ContextRow {
-        text: "Autohide"
+        text: I18n.t("Autohide")
         checked: root ? root.autohide : false
         onTriggered: { if (root) root.setAutohideMode(root.autohide ? "always" : "intelligent") }
       }
 
       ContextRow {
-        text: "Create Group from Running Apps"
+        text: I18n.t("Create Group from Running Apps")
         onTriggered: {
           if (root) {
             root.createAppGroupFromRunning()
@@ -134,13 +135,13 @@ BorderSurface {
       visible: root ? (root.contextAppId === "__dock_settings__" && contextMenu.dockPage === "presets") : false
 
       ContextRow {
-        text: "‹ Back"
+        text: I18n.t("‹ Back")
         textColor: Color.accent
         onTriggered: contextMenu.dockPage = ""
       }
 
       ContextRow {
-        text: "Presets"
+        text: I18n.t("Presets")
         isHeader: true
       }
 
@@ -162,7 +163,7 @@ BorderSurface {
       MenuDivider {}
 
       ContextRow {
-        text: "Manage Presets…"
+        text: I18n.t("Manage Presets…")
         onTriggered: {
           if (!root) return
           root.settingsPanelPage = "presets"
@@ -199,13 +200,13 @@ BorderSurface {
       }
 
       ContextRow {
-        text: "View As: " + (root && root.folderViewFor(root.contextFolderPath) === "grid" ? "Folder" : "Stack") + " ›"
+        text: I18n.t("View As: ") + I18n.t(root && root.folderViewFor(root.contextFolderPath) === "grid" ? "Folder" : "Stack") + " ›"
         visible: root ? !root.contextIsButton : false
         onTriggered: contextMenu.folderPage = "view"
       }
 
       ContextRow {
-        text: "Sort By: " + (root ? (root.folderSortLabels[root.folderSortFor(root.contextFolderPath)] || "Date Modified") : "Date Modified") + " ›"
+        text: I18n.t("Sort By: ") + I18n.t(root ? (root.folderSortLabels[root.folderSortFor(root.contextFolderPath)] || "Date Modified") : "Date Modified") + " ›"
         visible: root ? !root.contextIsButton : false
         onTriggered: contextMenu.folderPage = "sort"
       }
@@ -213,7 +214,7 @@ BorderSurface {
       MenuDivider { visible: root ? !root.contextIsButton : false }
 
       ContextRow {
-        text: "Open in File Manager"
+        text: I18n.t("Open in File Manager")
         visible: root ? !root.contextIsButton : false
         onTriggered: {
           if (root) {
@@ -224,7 +225,7 @@ BorderSurface {
       }
 
       ContextRow {
-        text: "Open in Terminal"
+        text: I18n.t("Open in Terminal")
         visible: root ? !root.contextIsButton : false
         onTriggered: {
           if (root) {
@@ -237,7 +238,7 @@ BorderSurface {
       MenuDivider { visible: root ? !root.contextIsButton : false }
 
       ContextRow {
-        text: "Unpin from Dock"
+        text: I18n.t("Unpin from Dock")
         danger: true
         onTriggered: {
           if (root) {
@@ -256,20 +257,20 @@ BorderSurface {
       visible: root ? (root.contextAppId === "__folder_context__" && contextMenu.folderPage === "view") : false
 
       ContextRow {
-        text: "‹ Back"
+        text: I18n.t("‹ Back")
         textColor: Color.accent
         onTriggered: contextMenu.folderPage = ""
       }
 
       ContextRow {
-        text: "View As"
+        text: I18n.t("View As")
         isHeader: true
       }
 
       Repeater {
         model: [
-          { value: "stack", label: "Stack" },
-          { value: "grid", label: "Folder" }
+          { value: "stack", label: I18n.t("Stack") },
+          { value: "grid", label: I18n.t("Folder") }
         ]
         delegate: ContextRow {
           required property var modelData
@@ -290,13 +291,13 @@ BorderSurface {
       visible: root ? (root.contextAppId === "__folder_context__" && contextMenu.folderPage === "sort") : false
 
       ContextRow {
-        text: "‹ Back"
+        text: I18n.t("‹ Back")
         textColor: Color.accent
         onTriggered: contextMenu.folderPage = ""
       }
 
       ContextRow {
-        text: "Sort By"
+        text: I18n.t("Sort By")
         isHeader: true
       }
 
@@ -326,7 +327,7 @@ BorderSurface {
       }
 
       ContextRow {
-        text: (root && root.contextTileWins.length > 1) ? "Restore All Here" : "Restore Here"
+        text: (root && root.contextTileWins.length > 1) ? I18n.t("Restore All Here") : I18n.t("Restore Here")
         onTriggered: {
           if (root) {
             root.restoreContextTile()
@@ -336,7 +337,7 @@ BorderSurface {
       }
 
       ContextRow {
-        text: (root && root.contextTileWins.length > 1) ? "Restore All to Original" : "Restore to Original"
+        text: (root && root.contextTileWins.length > 1) ? I18n.t("Restore All to Original") : I18n.t("Restore to Original")
         onTriggered: {
           if (root) {
             root.restoreContextTileOriginal()
@@ -348,7 +349,7 @@ BorderSurface {
       MenuDivider {}
 
       ContextRow {
-        text: (root && root.contextTilePinned) ? "Unpin from Dock" : "Pin to Dock"
+        text: (root && root.contextTilePinned) ? I18n.t("Unpin from Dock") : I18n.t("Pin to Dock")
         onTriggered: {
           if (root) {
             root.togglePin(root.contextTileAppId)
@@ -360,7 +361,7 @@ BorderSurface {
       MenuDivider {}
 
       ContextRow {
-        text: (root && root.contextTileWins.length > 1) ? "Close All" : "Close"
+        text: (root && root.contextTileWins.length > 1) ? I18n.t("Close All") : I18n.t("Close")
         danger: true
         onTriggered: {
           if (root) {
@@ -377,7 +378,7 @@ BorderSurface {
       visible: root ? root.contextAppId === "__drive_context__" : false
 
       ContextRow {
-        text: (root ? root.contextDriveName : "") || "USB Drive"
+        text: (root ? root.contextDriveName : "") || I18n.t("USB Drive")
         isHeader: true
       }
 
@@ -391,7 +392,7 @@ BorderSurface {
       MenuDivider {}
 
       ContextRow {
-        text: "Open in File Manager"
+        text: I18n.t("Open in File Manager")
         onTriggered: {
           if (root) {
             Util.execDetached("uwsm-app -- xdg-open " + Util.shellQuote(root.contextDriveMount))
@@ -401,7 +402,7 @@ BorderSurface {
       }
 
       ContextRow {
-        text: "Open in Terminal"
+        text: I18n.t("Open in Terminal")
         onTriggered: {
           if (root) {
             Util.execDetached("uwsm-app -- omarchy-terminal -d " + Util.shellQuote(root.contextDriveMount))
@@ -411,7 +412,7 @@ BorderSurface {
       }
 
       ContextRow {
-        text: "Copy Mount Path"
+        text: I18n.t("Copy Mount Path")
         onTriggered: {
           if (root) {
             Util.execDetached("uwsm-app -- wl-copy " + Util.shellQuote(root.contextDriveMount))
@@ -423,7 +424,7 @@ BorderSurface {
       MenuDivider {}
 
       ContextRow {
-        text: "Safely Eject / Unmount"
+        text: I18n.t("Safely Eject / Unmount")
         textColor: Color.urgent || Color.accent
         onTriggered: {
           if (root) {
@@ -439,12 +440,12 @@ BorderSurface {
       visible: root ? root.contextAppId === "__app_group_context__" : false
 
       ContextRow {
-        text: (root && root.contextAppGroupData) ? root.contextAppGroupData.name : "App Group"
+        text: (root && root.contextAppGroupData) ? root.contextAppGroupData.name : I18n.t("App Group")
         isHeader: true
       }
 
       ContextRow {
-        text: (root && root.contextAppGroupData && root.contextAppGroupData.apps) ? (root.contextAppGroupData.apps.length + " Apps") : ""
+        text: (root && root.contextAppGroupData && root.contextAppGroupData.apps) ? I18n.fmt("%1 Apps", root.contextAppGroupData.apps.length) : ""
         textColor: Util.alpha(Color.menu.text, 0.6)
         isHeader: true
         visible: text !== ""
@@ -466,7 +467,7 @@ BorderSurface {
       }
 
       ContextRow {
-        text: "Open Group Grid"
+        text: I18n.t("Open Group Grid")
         onTriggered: {
           if (root && root.contextAppGroupData) {
             root.openAppGroup(root.contextAppGroupData, root.contextX, root.contextY)
@@ -476,7 +477,7 @@ BorderSurface {
       }
 
       ContextRow {
-        text: "Ungroup"
+        text: I18n.t("Ungroup")
         onTriggered: {
           if (root && root.contextAppGroupData) {
             root.ungroupAppGroup(root.contextAppGroupData.id)
@@ -486,7 +487,7 @@ BorderSurface {
       }
 
       ContextRow {
-        text: "Remove Group"
+        text: I18n.t("Remove Group")
         danger: true
         onTriggered: {
           if (root && root.contextAppGroupData) {
@@ -527,7 +528,7 @@ BorderSurface {
           // No window but a live player: the app runs in the background
           // (closed to the tray), which the dock shows as a faint dot.
           ContextRow {
-            text: (root && root.contextWindows === 0) ? "Now Playing · in background" : "Now Playing"
+            text: (root && root.contextWindows === 0) ? I18n.t("Now Playing · in background") : I18n.t("Now Playing")
             isHeader: true
           }
 
@@ -579,9 +580,9 @@ BorderSurface {
 
             Repeater {
               model: [
-                { id: "previous", glyph: "󰒮", label: "Previous" },
-                { id: "toggle", glyph: "", label: "Play / Pause" },
-                { id: "next", glyph: "󰒭", label: "Next" }
+                { id: "previous", glyph: "󰒮", label: I18n.t("Previous") },
+                { id: "toggle", glyph: "", label: I18n.t("Play / Pause") },
+                { id: "next", glyph: "󰒭", label: I18n.t("Next") }
               ]
               delegate: Rectangle {
                 id: mediaButton
@@ -636,8 +637,8 @@ BorderSurface {
 
           ContextRow {
             text: (root && root.contextWindowList.length > 1)
-              ? ("Windows (" + root.contextWindowList.length + ")")
-              : "Active Window"
+              ? (I18n.t("Windows") + " (" + root.contextWindowList.length + ")")
+              : I18n.t("Active Window")
             isHeader: true
           }
 
@@ -661,7 +662,7 @@ BorderSurface {
 
           ContextRow {
             visible: root ? (root.contextWindowList.length > 8) : false
-            text: "+ " + (root ? (root.contextWindowList.length - 8) : 0) + " more windows"
+            text: I18n.fmt("+ %1 more windows", (root ? (root.contextWindowList.length - 8) : 0))
             isHeader: true
           }
 
@@ -693,7 +694,7 @@ BorderSurface {
         // A running media app gets playback controls above instead of a
         // second window it rarely supports.
         ContextRow {
-          text: (root && root.contextWindows > 0) ? "New Window" : "Launch"
+          text: (root && root.contextWindows > 0) ? I18n.t("New Window") : I18n.t("Launch")
           visible: root ? (root.contextDesktopActions.length === 0 && !(root.contextWindows > 0 && mediaSection.player !== null)) : true
           onTriggered: {
             if (root) {
@@ -705,7 +706,7 @@ BorderSurface {
 
         // 3. Window & Dock Management
         ContextRow {
-          text: "Minimize Window"
+          text: I18n.t("Minimize Window")
           visible: root ? (root.minimizeMode !== "off" && root.contextWindows > 1) : false
           onTriggered: {
             if (root) {
@@ -718,7 +719,7 @@ BorderSurface {
         // From a cell of an app group the app leaves the group for the dock
         // instead (pinning an app the group holds would be ambiguous).
         ContextRow {
-          text: (root && root.contextAppGroupData) ? "Remove from Group" : (root && root.contextPinned) ? "Unpin from Dock" : "Pin to Dock"
+          text: (root && root.contextAppGroupData) ? I18n.t("Remove from Group") : (root && root.contextPinned) ? I18n.t("Unpin from Dock") : I18n.t("Pin to Dock")
           onTriggered: {
             if (root && root.contextAppGroupData) {
               root.removeAppFromGroup(root.contextAppGroupData.id, root.contextAppId)
@@ -754,7 +755,7 @@ BorderSurface {
         }
 
         ContextRow {
-          text: (root && root.contextWindows > 1) ? "Close All Windows" : "Close Window"
+          text: (root && root.contextWindows > 1) ? I18n.t("Close All Windows") : I18n.t("Close Window")
           visible: root ? (root.contextWindows > 0) : false
           danger: true
           onTriggered: {

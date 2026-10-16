@@ -1,6 +1,7 @@
 import QtQuick 6.11
 import qs.Commons
 import qs.Ui
+import "../../Locale.js" as I18n
 
 // Settings page: background, border, divider, shape and dock-item rows.
 // Instantiated by SettingsPanel, which injects root (the Dock, for
@@ -12,12 +13,12 @@ Column {
   width: parent.width
 
 
-  SectionLabel { text: "Background" }
+  SectionLabel { text: I18n.t("Background") }
 
   SwitchRow {
     key: "showBackground"
-    label: "Background"
-    hint: "Fill behind the icons. Off leaves the icons floating."
+    label: I18n.t("Background")
+    hint: I18n.t("Fill behind the icons. Off leaves the icons floating.")
     checked: root ? root.showBackground : true
     onToggled: root.setOption("showBackground", !root.showBackground)
   }
@@ -28,11 +29,11 @@ Column {
 
     ChoiceRow {
       key: "bgFill"
-      label: "Fill"
-      hint: "A solid colour, or colours melting into each other like Zen / Arc themes."
+      label: I18n.t("Fill")
+      hint: I18n.t("A solid colour, or colours melting into each other like Zen / Arc themes.")
       options: [
-        { value: "solid", label: "Solid" },
-        { value: "gradient", label: "Gradient" }
+        { value: "solid", label: I18n.t("Solid") },
+        { value: "gradient", label: I18n.t("Gradient") }
       ]
       value: root ? root.bgFill : "solid"
       onPicked: function(v) { root.setOption("bgFill", v) }
@@ -44,21 +45,21 @@ Column {
 
       SettingRow {
         key: "bgColor"
-        label: "Color"
-        hint: "Theme, none, or a fixed preset."
+        label: I18n.t("Color")
+        hint: I18n.t("Theme, none, or a fixed preset.")
 
         Row {
           spacing: Style.spacing.sm
 
           Button {
-            text: "Theme"
+            text: I18n.t("Theme")
             foreground: Color.menu.text
             bordered: true
             selected: root ? (root.dockBgColor === "theme" || !root.dockBgColor) : true
             onClicked: root.setDockBgColor("theme")
           }
           Button {
-            text: "None"
+            text: I18n.t("None")
             foreground: Color.menu.text
             bordered: true
             selected: root ? root.dockBgColor === "none" : false
@@ -94,8 +95,8 @@ Column {
 
       SettingRow {
         key: "gradientPalette"
-        label: "Palette"
-        hint: "Theme builds one from the Omarchy theme's accent and palette."
+        label: I18n.t("Palette")
+        hint: I18n.t("Theme builds one from the Omarchy theme's accent and palette.")
       }
 
       Flow {
@@ -135,7 +136,7 @@ Column {
             Text {
               width: Style.space(64)
               horizontalAlignment: Text.AlignHCenter
-              text: paletteTile.modelData.name
+              text: I18n.t(paletteTile.modelData.name)
               textFormat: Text.PlainText
               color: paletteTile.current ? Color.accent : Util.alpha(Color.menu.text, 0.7)
               font.family: Style.font.family
@@ -147,8 +148,8 @@ Column {
 
       SliderRow {
         key: "gradientStrength"
-        label: "Strength"
-        hint: "How strongly the colours show over the theme background."
+        label: I18n.t("Strength")
+        hint: I18n.t("How strongly the colours show over the theme background.")
         minimum: 0
         maximum: 1
         step: 0.05
@@ -161,14 +162,14 @@ Column {
 
     SwitchRow {
       key: "opacityTheme"
-      label: "Opacity from theme"
-      hint: "Follow the bar opacity of the current Omarchy theme."
+      label: I18n.t("Opacity from theme")
+      hint: I18n.t("Follow the bar opacity of the current Omarchy theme.")
       checked: root ? root.dockOpacity < 0 : true
       onToggled: root.setDockOpacity(root.dockOpacity < 0 ? 1.0 : -1.0)
     }
     SliderRow {
       key: "opacity"
-      label: "Opacity"
+      label: I18n.t("Opacity")
       visible: root ? root.dockOpacity >= 0 : false
       minimum: 0
       maximum: 1
@@ -182,18 +183,18 @@ Column {
 
   }
 
-  SectionLabel { text: "Border" }
+  SectionLabel { text: I18n.t("Border") }
 
   SwitchRow {
     key: "border"
-    label: "Border"
-    hint: "Thin rim around the dock."
+    label: I18n.t("Border")
+    hint: I18n.t("Thin rim around the dock.")
     checked: root ? root.showBorder : true
     onToggled: root.setShowBorder(!root.showBorder)
   }
   SliderRow {
     key: "borderWidth"
-    label: "Border width"
+    label: I18n.t("Border width")
     visible: root ? root.showBorder : true
     minimum: 1
     maximum: 6
@@ -205,15 +206,15 @@ Column {
   }
   SwitchRow {
     key: "borderOpacityTheme"
-    label: "Border opacity from theme"
-    hint: "Derive the rim opacity from the dock's opacity, as themes expect. Turn off to set it by hand."
+    label: I18n.t("Border opacity from theme")
+    hint: I18n.t("Derive the rim opacity from the dock's opacity, as themes expect. Turn off to set it by hand.")
     checked: root ? root.borderOpacity < 0 : true
     visible: root ? root.showBorder : true
     onToggled: root.setBorderOpacity(root.borderOpacity < 0 ? 1.0 : -1.0)
   }
   SliderRow {
     key: "borderOpacity"
-    label: "Border opacity"
+    label: I18n.t("Border opacity")
     visible: root ? (root.showBorder && root.borderOpacity >= 0) : false
     minimum: 0
     maximum: 1
@@ -225,27 +226,27 @@ Column {
   }
   ChoiceRow {
     key: "dividerLength"
-    label: "Divider length style"
-    hint: "Classic preserves the original icon-height lines. Long uses an adjustable share of the dock height."
+    label: I18n.t("Divider length style")
+    hint: I18n.t("Classic preserves the original icon-height lines. Long uses an adjustable share of the dock height.")
     visible: root ? !root.placement.split : true
-    options: [{ value: "classic", label: "Classic" }, { value: "long", label: "Long" }]
+    options: [{ value: "classic", label: I18n.t("Classic") }, { value: "long", label: I18n.t("Long") }]
     value: root ? root.dividerGeometry : "classic"
     onPicked: function(v) { root.setOption("dividerGeometry", v) }
   }
   ChoiceRow {
     key: "dividerStyle"
-    label: "Divider style"
-    hint: "Theme draws the lines like the border, in its colour, opacity and width. Custom sets the width and opacity by hand."
+    label: I18n.t("Divider style")
+    hint: I18n.t("Theme draws the lines like the border, in its colour, opacity and width. Custom sets the width and opacity by hand.")
     visible: root ? !root.placement.split : true
     options: (root && !root.showBorder)
-      ? [{ value: "simple", label: "Simple" }, { value: "custom", label: "Custom" }]
-      : [{ value: "simple", label: "Simple" }, { value: "theme", label: "Theme" }, { value: "custom", label: "Custom" }]
+      ? [{ value: "simple", label: I18n.t("Simple") }, { value: "custom", label: I18n.t("Custom") }]
+      : [{ value: "simple", label: I18n.t("Simple") }, { value: "theme", label: I18n.t("Theme") }, { value: "custom", label: I18n.t("Custom") }]
     value: root ? root.dividerStyle : "simple"
     onPicked: function(v) { root.setDividerStyle(v) }
   }
   SliderRow {
     key: "dividerWidth"
-    label: "Divider width"
+    label: I18n.t("Divider width")
     visible: root ? (!root.placement.split && root.dividerStyle === "custom") : false
     minimum: 1
     maximum: 6
@@ -257,7 +258,7 @@ Column {
   }
   SliderRow {
     key: "dividerOpacity"
-    label: "Divider opacity"
+    label: I18n.t("Divider opacity")
     visible: root ? (!root.placement.split && root.dividerStyle === "custom") : false
     minimum: 0
     maximum: 1
@@ -269,8 +270,8 @@ Column {
   }
   SliderRow {
     key: "dividerHeight"
-    label: "Divider height"
-    hint: "Length of the lines between sections, as a share of the dock's height."
+    label: I18n.t("Divider height")
+    hint: I18n.t("Length of the lines between sections, as a share of the dock's height.")
     visible: root ? (!root.placement.split && root.dividerGeometry === "long") : false
     minimum: 20
     maximum: 100
@@ -280,17 +281,17 @@ Column {
     onCommitted: function(v) { root.setOption("dividerHeight", Math.round(v)) }
   }
 
-  SectionLabel { text: "Shape" }
+  SectionLabel { text: I18n.t("Shape") }
 
   ChoiceRow {
     key: "corners"
-    label: "Corners"
+    label: I18n.t("Corners")
     visible: root ? !root.placement.panel : true
     options: [
-      { value: "theme", label: "Theme" },
-      { value: "rounded", label: "Rounded" },
-      { value: "round", label: "Pill" },
-      { value: "square", label: "Square" }
+      { value: "theme", label: I18n.t("Theme") },
+      { value: "rounded", label: I18n.t("Rounded") },
+      { value: "round", label: I18n.t("Pill") },
+      { value: "square", label: I18n.t("Square") }
     ]
     value: {
       if (!root) return "theme"
@@ -303,7 +304,7 @@ Column {
   }
   SliderRow {
     key: "cornerRadius"
-    label: "Corner radius"
+    label: I18n.t("Corner radius")
     visible: root ? (!root.placement.panel && root.dockShape === "rounded") : false
     minimum: 2
     maximum: root ? root.maxRoundedRadius : 24
@@ -314,16 +315,16 @@ Column {
   }
   SwitchRow {
     key: "splitSections"
-    label: "Split sections"
+    label: I18n.t("Split sections")
     visible: root ? !root.placement.panel : true
-    hint: "Each part between the dividers becomes its own panel, with a gap in place of the divider."
+    hint: I18n.t("Each part between the dividers becomes its own panel, with a gap in place of the divider.")
     checked: root ? root.splitSections : false
     onToggled: root.setOption("splitSections", !root.splitSections)
   }
   SliderRow {
     key: "panelSpacing"
-    label: "Panel spacing"
-    hint: "Gap between the panels when sections are split."
+    label: I18n.t("Panel spacing")
+    hint: I18n.t("Gap between the panels when sections are split.")
     visible: root ? root.placement.split : false
     minimum: 0
     maximum: 48
@@ -334,30 +335,30 @@ Column {
   }
   ChoiceRow {
     key: "indicators"
-    label: "Indicators"
-    hint: "The dots and bars under icons. Theme follows the corners above."
+    label: I18n.t("Indicators")
+    hint: I18n.t("The dots and bars under icons. Theme follows the corners above.")
     options: [
-      { value: "theme", label: "Theme" },
-      { value: "rounded", label: "Rounded" },
-      { value: "square", label: "Square" }
+      { value: "theme", label: I18n.t("Theme") },
+      { value: "rounded", label: I18n.t("Rounded") },
+      { value: "square", label: I18n.t("Square") }
     ]
     value: root ? root.indicatorShape : "theme"
     onPicked: function(v) { root.setOption("indicatorShape", v) }
   }
 
-  SectionLabel { text: "Dock Items" }
+  SectionLabel { text: I18n.t("Dock Items") }
 
   SwitchRow {
     key: "appsButton"
-    label: "Omarchy button"
-    hint: "The launcher at the start of the dock. Without it, right-click the dock background to reach these settings."
+    label: I18n.t("Omarchy button")
+    hint: I18n.t("The launcher at the start of the dock. Without it, right-click the dock background to reach these settings.")
     checked: root ? root.showAppsButton : true
     onToggled: root.setOption("showAppsButton", !root.showAppsButton)
   }
   SwitchRow {
     key: "removableDrives"
-    label: "Removable drives"
-    hint: "Show mounted USB drives at the end of the dock."
+    label: I18n.t("Removable drives")
+    hint: I18n.t("Show mounted USB drives at the end of the dock.")
     checked: root ? root.showRemovableDrives : true
     onToggled: {
       root.setOption("showRemovableDrives", !root.showRemovableDrives)
@@ -366,8 +367,8 @@ Column {
   }
   SwitchRow {
     key: "warnUnsafeRemoval"
-    label: "Warn on unsafe removal"
-    hint: "Notify when a drive is pulled out while still mounted."
+    label: I18n.t("Warn on unsafe removal")
+    hint: I18n.t("Notify when a drive is pulled out while still mounted.")
     visible: root ? root.showRemovableDrives : true
     checked: root ? root.warnUnsafeRemoval : true
     onToggled: root.setOption("warnUnsafeRemoval", !root.warnUnsafeRemoval)

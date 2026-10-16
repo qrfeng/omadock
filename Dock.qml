@@ -47,6 +47,7 @@ Item {
   property bool _savingBadges: false
 
   property string screenName: ""
+  property string language: "auto"
   // Real, connected outputs only: Qt keeps placeholder screens (empty name)
   // alive while every output is gone and Quickshell marks destroyed outputs
   // dangling ("{ NULL SCREEN }"). Hosting the dock window on either one
@@ -1604,8 +1605,6 @@ Item {
   }
 
   function applyThemeChange() { return contextLogic.applyThemeChange(root) }
-
-  function folderColorLabel(colorId) { return contextLogic.folderColorLabel(root, colorId) }
 
   function setFolderColor(color) { return contextLogic.setFolderColor(root, color) }
 

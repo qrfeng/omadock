@@ -7,6 +7,7 @@ import Quickshell.Services.Mpris
 import qs.Commons
 import qs.Ui
 import "../../DockModel.js" as DockModel
+import "../../Locale.js" as I18n
 
 // Logic extracted from Dock.qml: stateless functions, the dock root
 // is passed in and owns all state. Bodies are verbatim.
@@ -43,26 +44,6 @@ QtObject {
       }
     }
     root.rescanApps()
-  }
-
-  function folderColorLabel(root, colorId) {
-    if (!colorId || colorId === "theme" || colorId === "auto") return "Auto (Theme)"
-    if (colorId === "white") return "White"
-    if (colorId === "black") return "Black"
-    if (colorId === "bw") return "Black or white"
-    var map = {
-      "Yaru-sage": "Sage Green",
-      "Yaru-olive": "Olive",
-      "Yaru-blue": "Blue",
-      "Yaru-purple": "Purple",
-      "Yaru-magenta": "Magenta",
-      "Yaru-red": "Red",
-      "Yaru-yellow": "Yellow",
-      "Yaru-wartybrown": "Brown",
-      "Yaru-prussiangreen": "Teal",
-      "Yaru-dark": "Charcoal"
-    }
-    return map[colorId] || colorId
   }
 
   function setFolderColor(root, color) {
@@ -185,20 +166,20 @@ QtObject {
   // The label comes from list-drives.py, already cleaned; it is escaped
   // again because notification bodies render markup.
   function notifyUnsafeRemoval(root, name) {
-    var label = String(name || "A drive").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    var label = String(name || I18n.t("A drive")).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
     Quickshell.execDetached([
       "bash", root.scriptPath("notify.sh"), "drive-removable-media",
-      "Drive removed without ejecting",
-      label + " was removed while still mounted. Recent changes may not have been written; eject it from the dock next time."
+      I18n.t("Drive removed without ejecting"),
+      label + I18n.t(" was removed while still mounted. Recent changes may not have been written; eject it from the dock next time.")
     ])
   }
 
   function notifyAppMissing(root, name, detail) {
-    var label = String(name || "This app").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    var label = String(name || I18n.t("This app")).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
     Quickshell.execDetached([
       "bash", root.scriptPath("notify.sh"), "dialog-error",
-      "App no longer installed",
-      label + " is no longer installed. " + String(detail || "Reinstall the app or unpin it from the dock.")
+      I18n.t("App no longer installed"),
+      label + I18n.t(" is no longer installed. ") + String(detail ? I18n.t(detail) : I18n.t("Reinstall the app or unpin it from the dock."))
     ])
   }
 

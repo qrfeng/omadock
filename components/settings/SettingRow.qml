@@ -1,6 +1,7 @@
 import QtQuick 6.11
 import qs.Commons
 import qs.Ui
+import "../../Locale.js" as I18n
 
 // Base settings row: label + optional hint on the left, control slot on
 // the right. A non-empty key makes the row a search target; SettingsPanel
@@ -39,9 +40,14 @@ Item {
 
     // Folder names, group names and paths reach these two unwrapped: they
     // are always plain text, never markup.
+    // The label is translated here as well as at the call site: call sites
+    // carry the English literal (so an upstream diff stays readable and a
+    // missing translation degrades to English), while this catches values a
+    // page builds at run time, like a folder or group name looked up from a
+    // model. Dictionary lookup is exact, so names pass through untouched.
     Text {
       width: parent.width
-      text: settingRow.label
+      text: I18n.t(settingRow.label)
       textFormat: Text.PlainText
       color: Color.menu.text
       font.family: Style.font.family
@@ -51,7 +57,7 @@ Item {
     Text {
       width: parent.width
       visible: settingRow.hint !== ""
-      text: settingRow.hint
+      text: I18n.t(settingRow.hint)
       textFormat: Text.PlainText
       color: Util.alpha(Color.menu.text, 0.55)
       font.family: Style.font.family

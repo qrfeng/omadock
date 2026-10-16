@@ -5,6 +5,7 @@ import qs.Ui
 import "../DockIcons.js" as DockIcons
 import "../DockLabels.js" as DockLabels
 import "../DockModel.js" as DockModel
+import "../Locale.js" as I18n
 
 // The items the dock's fit moved out of the row (DockFit.js, DockFitHost),
 // in dock order, as an opened group shows its apps: icon, name, window
@@ -49,7 +50,7 @@ BorderSurface {
           icon: f.command ? pop.folderIcon(f.icon || "application-x-executable") : pop.folderIcon(DockIcons.folderIconFor(f.path, f.icon || "")), data: f })
       } else if (kind === "drive") {
         var d = right ? right.driveByKey[key] : null
-        if (d) out.push({ id: id, kind: "drive", title: d.name || "USB Drive", icon: pop.folderIcon(d.icon || "drive-removable-media"), data: d })
+        if (d) out.push({ id: id, kind: "drive", title: d.name || I18n.t("USB Drive"), icon: pop.folderIcon(d.icon || "drive-removable-media"), data: d })
       } else if (kind === "button") {
         out.push({ id: id, kind: "omarchy", title: "Omarchy", icon: Quickshell.iconPath("view-app-grid", true), data: null })
       }

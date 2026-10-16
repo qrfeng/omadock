@@ -1,6 +1,7 @@
 import QtQuick 6.11
 import qs.Commons
 import qs.Ui
+import "../../Locale.js" as I18n
 
 // Settings page: group look rows and the app group list.
 // Instantiated by SettingsPanel, which injects root (the Dock, for
@@ -12,40 +13,40 @@ Column {
   width: parent.width
 
 
-  SectionLabel { text: "Look" }
+  SectionLabel { text: I18n.t("Look") }
 
   ChoiceRow {
     key: "groupStyle"
-    label: "Tile style"
-    hint: "Frame drawn around a group's icons in the dock."
+    label: I18n.t("Tile style")
+    hint: I18n.t("Frame drawn around a group's icons in the dock.")
     options: [
-      { value: "rounded", label: "Rounded" },
-      { value: "square", label: "Square" },
-      { value: "none", label: "None" }
+      { value: "rounded", label: I18n.t("Rounded") },
+      { value: "square", label: I18n.t("Square") },
+      { value: "none", label: I18n.t("None") }
     ]
     value: root ? root.groupStyle : "rounded"
     onPicked: function(v) { root.setOption("groupStyle", v) }
   }
   ChoiceRow {
     key: "groupIconEffects"
-    label: "Icon style"
-    hint: "Theme applies the style from the Icons page to the icons of an opened group."
+    label: I18n.t("Icon style")
+    hint: I18n.t("Theme applies the style from the Icons page to the icons of an opened group.")
     options: [
-      { value: "theme", label: "Theme" },
-      { value: "none", label: "None" }
+      { value: "theme", label: I18n.t("Theme") },
+      { value: "none", label: I18n.t("None") }
     ]
     value: root ? root.groupIconEffects : "theme"
     onPicked: function(v) { root.setOption("groupIconEffects", v) }
   }
 
-  SectionLabel { text: "Groups" }
+  SectionLabel { text: I18n.t("Groups") }
 
   Text {
     width: parent.width
     visible: !root || root.appGroups.length === 0
     topPadding: Style.spacing.lg
     bottomPadding: Style.spacing.lg
-    text: "No groups yet. Drag one dock icon onto another, or create one from the apps that are running now."
+    text: I18n.t("No groups yet. Drag one dock icon onto another, or create one from the apps that are running now.")
     textFormat: Text.PlainText
     color: Util.alpha(Color.menu.text, 0.55)
     wrapMode: Text.WordWrap
@@ -101,7 +102,7 @@ Column {
             spacing: Style.spacing.md
 
             Text {
-              text: groupRow.modelData.name || "Group"
+              text: groupRow.modelData.name || I18n.t("Group")
               textFormat: Text.PlainText
               color: nameMouse.containsMouse ? Color.accent : Color.menu.text
               font.family: Style.font.family
@@ -132,7 +133,7 @@ Column {
             visible: groupRow.editing
             anchors.verticalCenter: parent.verticalCenter
             width: Math.min(parent.width, Style.space(260))
-            placeholderText: "Group name"
+            placeholderText: I18n.t("Group name")
             maximumLength: 120   // DockModel.MAX_APP_GROUP_NAME
             foreground: Color.menu.text
             Keys.onReturnPressed: groupRow.finishEdit(true)
@@ -166,7 +167,7 @@ Column {
         id: removeButton
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
-        text: "Remove"
+        text: I18n.t("Remove")
         foreground: Color.menu.text
         bordered: true
         onClicked: root.removeAppGroup(groupRow.modelData.id)
@@ -184,7 +185,7 @@ Column {
   Item { width: 1; height: Style.spacing.xxl }
 
   Button {
-    text: "Create group from running apps"
+    text: I18n.t("Create group from running apps")
     foreground: Color.menu.text
     bordered: true
     onClicked: root.createAppGroupFromRunning()

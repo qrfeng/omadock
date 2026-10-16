@@ -47,6 +47,12 @@ jobs:
       - name: Structure check
         run: python3 tests/static/structure-check.py
 
+      # Local patch: every string that lands on a label/hint/tooltip has a key
+      # in Locale.js, so the Chinese build shows no stray English. Fails when an
+      # upstream update introduces a new string - add its translation then.
+      - name: Translation coverage
+        run: python3 tests/static/translation-coverage.py
+
   qml-lint:
     name: QML syntax gate
     runs-on: ubuntu-24.04
