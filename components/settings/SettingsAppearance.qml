@@ -228,7 +228,7 @@ Column {
     key: "dividerLength"
     label: I18n.t("Divider length style")
     hint: I18n.t("Classic preserves the original icon-height lines. Long uses an adjustable share of the dock height.")
-    visible: root ? !root.placement.split : true
+    visible: root ? (!root.placement.split && root.dividerStyle !== "none") : true
     options: [{ value: "classic", label: I18n.t("Classic") }, { value: "long", label: I18n.t("Long") }]
     value: root ? root.dividerGeometry : "classic"
     onPicked: function(v) { root.setOption("dividerGeometry", v) }
@@ -236,11 +236,11 @@ Column {
   ChoiceRow {
     key: "dividerStyle"
     label: I18n.t("Divider style")
-    hint: I18n.t("Theme draws the lines like the border, in its colour, opacity and width. Custom sets the width and opacity by hand.")
+    hint: I18n.t("Theme draws the lines like the border, in its colour, opacity and width. Custom sets the width and opacity by hand. Hidden drops the lines and the room around them, for docks whose plates already show the sections.")
     visible: root ? !root.placement.split : true
     options: (root && !root.showBorder)
-      ? [{ value: "simple", label: I18n.t("Simple") }, { value: "custom", label: I18n.t("Custom") }]
-      : [{ value: "simple", label: I18n.t("Simple") }, { value: "theme", label: I18n.t("Theme") }, { value: "custom", label: I18n.t("Custom") }]
+      ? [{ value: "simple", label: I18n.t("Simple") }, { value: "custom", label: I18n.t("Custom") }, { value: "none", label: I18n.t("Hidden") }]
+      : [{ value: "simple", label: I18n.t("Simple") }, { value: "theme", label: I18n.t("Theme") }, { value: "custom", label: I18n.t("Custom") }, { value: "none", label: I18n.t("Hidden") }]
     value: root ? root.dividerStyle : "simple"
     onPicked: function(v) { root.setDividerStyle(v) }
   }
@@ -272,7 +272,7 @@ Column {
     key: "dividerHeight"
     label: I18n.t("Divider height")
     hint: I18n.t("Length of the lines between sections, as a share of the dock's height.")
-    visible: root ? (!root.placement.split && root.dividerGeometry === "long") : false
+    visible: root ? (!root.placement.split && root.dividerGeometry === "long" && root.dividerStyle !== "none") : false
     minimum: 20
     maximum: 100
     step: 5
