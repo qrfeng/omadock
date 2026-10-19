@@ -8,10 +8,15 @@
 // ChoiceRow, SettingsPanel) pass it through t() at display time, so an update
 // only needs the *new* strings added to DICT.
 //
-// `.pragma library` keeps one shared copy of `lang` for the whole shell; the
-// dock sets it from `language` in ~/.config/omarchy/omadock.json at config
-// load. Text lives inside LazyLoaders (settings panel, context menu, popups),
-// all built on open, so the language is applied before any of it renders.
+// `.pragma library` shares `lang` per URL that resolves this file, *not* per
+// shell: quickshell 0.3.2 loads the very same file under both `qs:` (the bar's
+// import chain) and `file:` (surfaces built later), so a `setLang` from the
+// config loader only reaches one of the two copies. Every other copy is pushed
+// the language by components/LangMirror.qml, which reads `language` from
+// ~/.config/omarchy/omadock.json through the dock. Text lives inside
+// LazyLoaders (settings panel, context menu, popups), all built on open, so it
+// is applied before any of it renders; `tr(text, code)` exists for bindings that
+// must follow a switch without rebuilding.
 //
 // Keys are the exact upstream English text. Keep the key byte-identical to
 // the literal it translates, including the ellipsis character and "›".

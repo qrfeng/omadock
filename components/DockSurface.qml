@@ -10,6 +10,11 @@ BorderSurface {
 
   property var rootRef: null
   readonly property var root: rootRef
+
+  // This file's import chain is the dock's own, but it is also the first
+  // always-alive item in `components/`, so it is where the language gets
+  // mirrored into whichever Locale.js copy that group resolved.
+  LangMirror { dock: surface.root }
   // Snapped to device pixels by the card, which also lays out by it.
   property real borderWidth: 1.5
 

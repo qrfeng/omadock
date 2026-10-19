@@ -17,6 +17,20 @@ PanelWindow {
   property var rootRef: null
   readonly property var root: rootRef
 
+  // The settings subtree is built on open, i.e. under its own import chain, so
+  // it may read a different copy of Locale.js than the dock does. Without this
+  // the whole window renders English while the dock itself is Chinese.
+  // Declared first on purpose: items complete in declaration order, so this
+  // runs before the sidebar and the pages below read the dictionary.
+  LangMirror {
+    id: settingsLangMirror
+    dock: panel.root
+  }
+  // QML-visible copy of the language. `I18n.t()` reads library state, which no
+  // binding observes, so anything that must follow a language switch without
+  // rebuilding the panel goes through `I18n.tr(text, panel.i18nCode)`.
+  readonly property string i18nCode: settingsLangMirror.code
+
   property string page: root ? root.settingsPanelPage : "appearance"
 
   // Id of the app group whose name is being edited; Esc then cancels the
@@ -142,7 +156,7 @@ PanelWindow {
 
   function pageLabelOf(id) {
     for (var i = 0; i < panel.pages.length; i++)
-      if (panel.pages[i].id === id) return I18n.t(panel.pages[i].label)
+      if (panel.pages[i].id === id) return I18n.tr(panel.pages[i].label, panel.i18nCode)
     return ""
   }
 
@@ -333,7 +347,7 @@ PanelWindow {
                 anchors.right: hitWhere.left
                 anchors.rightMargin: Style.spacing.sm
                 anchors.verticalCenter: parent.verticalCenter
-                text: I18n.t(hitRow.modelData.label)
+                text: I18n.tr(hitRow.modelData.label, panel.i18nCode)
                 textFormat: Text.PlainText
                 elide: Text.ElideRight
                 color: Color.menu.text
@@ -419,7 +433,7 @@ PanelWindow {
               anchors.left: navIcon.right
               anchors.leftMargin: Style.spacing.lg
               anchors.verticalCenter: parent.verticalCenter
-              text: I18n.t(navItem.modelData.label)
+              text: I18n.tr(navItem.modelData.label, panel.i18nCode)
               textFormat: Text.PlainText
               color: navItem.current ? Color.accent : Color.menu.text
               font.family: Style.font.family
