@@ -241,6 +241,7 @@ var DICT = {
   "Font": "字体",
   "Sans": "无衬线",
   "Size": "字号",
+  "File Size": "文件大小",
   "Small": "小",
   "Medium": "中",
   "Large": "大",
@@ -549,6 +550,7 @@ var DICT = {
   "Drive": "磁盘",
   "Rename…": "重命名…",
   "Window": "窗口",
+  "minimized": "已最小化",
 
   // -------------------------------------------------- popups & notices
   "Folder could not be read": "无法读取该文件夹",

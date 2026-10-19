@@ -130,7 +130,7 @@ BorderSurface {
         anchors.right: parent.right
         anchors.rightMargin: Style.space(8)
         anchors.verticalCenter: parent.verticalCenter
-        text: ((root ? root.activeStackName : "") || "Folder")
+        text: ((root ? root.activeStackName : "") || I18n.t("Folder"))
           + ((root && root.activeStackTotalCount > 0) ? "  (" + DockLabels.stackCountLabel(root.activeStackTotalCount, root.activeStackTruncated) + ")" : "")
         textFormat: Text.PlainText
         color: Util.alpha(Color.menu.text, 0.7)

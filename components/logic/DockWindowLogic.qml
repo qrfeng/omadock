@@ -8,6 +8,7 @@ import qs.Commons
 import qs.Ui
 import "../../DockModel.js" as DockModel
 import "../../Plan.js" as Plan
+import "../../Locale.js" as I18n
 
 // Logic extracted from Dock.qml: stateless functions, the dock root
 // is passed in and owns all state. Bodies are verbatim.
@@ -751,10 +752,10 @@ QtObject {
 
   // Menu rows name the workspace a window sits on, including the parked ones.
   function windowRowLabel(root, window) {
-    var title = String((window && window.title) || "Window")
+    var title = String((window && window.title) || I18n.t("Window"))
     var wsName = root.liveWsNameOf(window)
     var isMin = wsName === root.minimizedWorkspace
-    var label = isMin ? "minimized" : (wsName !== "" ? wsName : "")
+    var label = isMin ? I18n.t("minimized") : (wsName !== "" ? wsName : "")
     return label !== "" ? "[" + label + "] " + title : title
   }
 }

@@ -179,7 +179,7 @@ BorderSurface {
       visible: root ? (root.contextAppId === "__folder_context__" && contextMenu.folderPage === "") : false
 
       ContextRow {
-        text: (root ? root.contextFolderName : "") || "Folder"
+        text: (root ? root.contextFolderName : "") || I18n.t("Folder")
         isHeader: true
       }
 
@@ -305,7 +305,7 @@ BorderSurface {
         model: ["name", "kind", "modified", "added", "size"]
         delegate: ContextRow {
           required property string modelData
-          text: root ? root.folderSortLabels[modelData] : modelData
+          text: root ? I18n.t(root.folderSortLabels[modelData]) : modelData
           checked: root ? root.folderSortFor(root.contextFolderPath) === modelData : false
           onTriggered: {
             if (!root) return
@@ -322,7 +322,7 @@ BorderSurface {
       visible: root ? root.contextAppId === "__tile_context__" : false
 
       ContextRow {
-        text: (root && root.contextTileName !== "") ? root.contextTileName : ((root && root.contextTileAppId !== "") ? root.contextTileAppId : "Window")
+        text: (root && root.contextTileName !== "") ? root.contextTileName : ((root && root.contextTileAppId !== "") ? root.contextTileAppId : I18n.t("Window"))
         isHeader: true
       }
 

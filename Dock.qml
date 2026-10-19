@@ -2102,7 +2102,7 @@ Item {
     kind: "Kind",
     modified: "Date Modified",
     added: "Date Added",
-    size: "Size"
+    size: "File Size"
   })
 
   function folderSortFor(path) { return folderLogic.folderSortFor(root, path) }

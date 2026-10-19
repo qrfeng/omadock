@@ -46,18 +46,21 @@ PanelWindow {
   property int currentBlurSize: 0
 
   // Categories in sidebar order. Page ids are also the IPC names
-  // (openSettingsPage), so "presets" and "about" keep their ids.
+  // (openSettingsPage), so "presets" and "about" keep their ids. Labels stay
+  // English here and are read through I18n.t() where they render: a
+  // `property var` list is built once, so translating it here would freeze
+  // whatever language was current when the panel was created.
   readonly property var pages: [
-    { id: "appearance", label: I18n.t("Appearance"), glyph: "󰏘" },
-    { id: "labels", label: I18n.t("Labels"), glyph: "󰓹" },
-    { id: "icons", label: I18n.t("Icons"), glyph: "󰩨" },
-    { id: "motion", label: I18n.t("Motion & Effects"), glyph: "󰨙" },
-    { id: "behavior", label: I18n.t("Behavior"), glyph: "󰒓" },
-    { id: "placement", label: I18n.t("Placement"), glyph: "󰍹" },
-    { id: "folders", label: I18n.t("Folders"), glyph: "󰉋" },
-    { id: "groups", label: I18n.t("App Groups"), glyph: "󰀻" },
-    { id: "presets", label: I18n.t("Presets"), glyph: "󰆓" },
-    { id: "about", label: I18n.t("About"), glyph: "󰋼" }
+    { id: "appearance", label: "Appearance", glyph: "󰏘" },
+    { id: "labels", label: "Labels", glyph: "󰓹" },
+    { id: "icons", label: "Icons", glyph: "󰩨" },
+    { id: "motion", label: "Motion & Effects", glyph: "󰨙" },
+    { id: "behavior", label: "Behavior", glyph: "󰒓" },
+    { id: "placement", label: "Placement", glyph: "󰍹" },
+    { id: "folders", label: "Folders", glyph: "󰉋" },
+    { id: "groups", label: "App Groups", glyph: "󰀻" },
+    { id: "presets", label: "Presets", glyph: "󰆓" },
+    { id: "about", label: "About", glyph: "󰋼" }
   ]
 
   // ---------------------------------------------------------- settings search
@@ -139,7 +142,7 @@ PanelWindow {
 
   function pageLabelOf(id) {
     for (var i = 0; i < panel.pages.length; i++)
-      if (panel.pages[i].id === id) return panel.pages[i].label
+      if (panel.pages[i].id === id) return I18n.t(panel.pages[i].label)
     return ""
   }
 
@@ -416,7 +419,7 @@ PanelWindow {
               anchors.left: navIcon.right
               anchors.leftMargin: Style.spacing.lg
               anchors.verticalCenter: parent.verticalCenter
-              text: navItem.modelData.label
+              text: I18n.t(navItem.modelData.label)
               textFormat: Text.PlainText
               color: navItem.current ? Color.accent : Color.menu.text
               font.family: Style.font.family
